@@ -53,28 +53,41 @@ import time
 import RPi.GPIO as GPIO
 import logging
 from datetime import datetime
+import signal
 
-# Grab the current datetime which will be used to generate dynamic folder names
-d = datetime.now()
-initYear = "%04d" % (d.year) 
-initMonth = "%02d" % (d.month) 
-initDate = "%02d" % (d.day)
-initHour = "%02d" % (d.hour)
-initMins = "%02d" % (d.minute)
+folderToSave = ""
+fileSerial = 0
 
-# Define the location where you wish to save files. Set to HOME as default. 
-# If you run a local web server on Apache you could set this to /var/www/ to make them 
-# accessible via web browser.
-folderToSave = "/srv/www/httpi/timelapse/" + str(initYear) + str(initMonth) + str(initDate) + str(initHour) + str(initMins)
-os.mkdir(folderToSave)
+def buildFolder(signum, stack):
+    global folderToSave
+    global fileSerial
+    
+    # Grab the current datetime which will be used to generate dynamic folder names
+    d = datetime.now()
+    initYear = "%04d" % (d.year) 
+    initMonth = "%02d" % (d.month) 
+    initDate = "%02d" % (d.day)
+    initHour = "%02d" % (d.hour)
+    initMins = "%02d" % (d.minute)
 
-# Set up a log file to store activities for any checks.
-logging.basicConfig(filename=str(folderToSave) + ".log",level=logging.DEBUG)
-logging.debug(" R A S P I L A P S E C A M -- Started Log for " + str(folderToSave))
-logging.debug(" Support at http://fotosyn.com/timelapse/")
+    # Define the location where you wish to save files. Set to HOME as default. 
+    # If you run a local web server on Apache you could set this to /var/www/ to make them 
+    # accessible via web browser.
+    folderToSave = "/srv/www/httpi/timelapse/" + str(initYear) + str(initMonth) + str(initDate) + str(initHour) + str(initMins)
+    os.mkdir(folderToSave)
 
-# Set the initial serial for saved images to 1
-fileSerial = 1
+    # Set up a log file to store activities for any checks.
+    logging.basicConfig(filename=str(folderToSave) + ".log",level=logging.DEBUG)
+    logging.debug("  R A S P I L A P S E C A M   -- Started Log for " + str(folderToSave))
+    logging.debug(" Support at http://fotosyn.com/timelapse/")
+
+    # Set the initial serial for saved images to 1
+    fileSerial = 1
+
+signal.signal(signal.SIGUSR1, buildFolder)
+signal.signal(signal.SIGUSR2, buildFolder)
+
+buildFolder(0,0)
 
 # Run a WHILE Loop of infinitely
 while True:

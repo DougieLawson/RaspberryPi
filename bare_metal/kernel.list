@@ -1,0 +1,62 @@
+
+build/output.elf:     file format elf32-littlearm
+
+
+Disassembly of section .init:
+
+00008000 <_start>:
+    8000:	e59f00a8 	ldr	r0, [pc, #168]	; 80b0 <resetall+0x14>
+    8004:	e3a01001 	mov	r1, #1
+    8008:	e1a01d81 	lsl	r1, r1, #27
+    800c:	e3a02001 	mov	r2, #1
+    8010:	e1a02602 	lsl	r2, r2, #12
+    8014:	e0811002 	add	r1, r1, r2
+    8018:	e5801000 	str	r1, [r0]
+    801c:	e3a01001 	mov	r1, #1
+    8020:	e1a01301 	lsl	r1, r1, #6
+    8024:	e5801008 	str	r1, [r0, #8]
+    8028:	e3a01001 	mov	r1, #1
+    802c:	e1a01b01 	lsl	r1, r1, #22
+    8030:	e3a02001 	mov	r2, #1
+    8034:	e1a02482 	lsl	r2, r2, #9
+    8038:	e3a03001 	mov	r3, #1
+    803c:	e1a03203 	lsl	r3, r3, #4
+
+00008040 <mainloop>:
+    8040:	e1a04002 	mov	r4, r2
+    8044:	eb00000b 	bl	8078 <set_wait>
+    8048:	e1a04002 	mov	r4, r2
+    804c:	eb000009 	bl	8078 <set_wait>
+    8050:	e1a04001 	mov	r4, r1
+    8054:	e0844002 	add	r4, r4, r2
+    8058:	eb000006 	bl	8078 <set_wait>
+    805c:	e1a04003 	mov	r4, r3
+    8060:	eb000004 	bl	8078 <set_wait>
+    8064:	e1a04003 	mov	r4, r3
+    8068:	eb000002 	bl	8078 <set_wait>
+    806c:	e1a04001 	mov	r4, r1
+    8070:	eb000000 	bl	8078 <set_wait>
+    8074:	eafffff1 	b	8040 <mainloop>
+
+00008078 <set_wait>:
+    8078:	e580401c 	str	r4, [r0, #28]
+    807c:	e3a06005 	mov	r6, #5
+
+00008080 <counter>:
+    8080:	e3a0583f 	mov	r5, #4128768	; 0x3f0000
+
+00008084 <waitloop>:
+    8084:	e2455001 	sub	r5, r5, #1
+    8088:	e3550000 	cmp	r5, #0
+    808c:	1afffffc 	bne	8084 <waitloop>
+    8090:	e2466001 	sub	r6, r6, #1
+    8094:	e3560000 	cmp	r6, #0
+    8098:	1afffff8 	bne	8080 <counter>
+
+0000809c <resetall>:
+    809c:	e1a04001 	mov	r4, r1
+    80a0:	e0844002 	add	r4, r4, r2
+    80a4:	e0844003 	add	r4, r4, r3
+    80a8:	e5804028 	str	r4, [r0, #40]	; 0x28
+    80ac:	e12fff1e 	bx	lr
+    80b0:	20200000 	.word	0x20200000

@@ -1,0 +1,32 @@
+
+Discarded input sections
+
+ .bss           0x00000000        0x0 build/fish_dish.o
+ .ARM.attributes
+                0x00000000       0x16 build/fish_dish.o
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+LOAD build/fish_dish.o
+
+.init           0x00008000       0xb4
+ *(.init)
+ .init          0x00008000       0xb4 build/fish_dish.o
+                0x00008000                _start
+
+.text           0x000080b4        0x0
+ *(.text)
+ .text          0x000080b4        0x0 build/fish_dish.o
+
+.data           0x000080b4        0x0
+ *(.data)
+ .data          0x000080b4        0x0 build/fish_dish.o
+
+/DISCARD/
+ *(*)
+OUTPUT(build/output.elf elf32-littlearm)

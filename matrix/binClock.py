@@ -29,15 +29,6 @@ DIRB   = 0x01            #PortB I/O direction, by pin. 0=output, 1=input
 PORTA  = 0x12            #Register address for PortA
 PORTB  = 0x13            #Register address for PortB
 
-
-ORIENTATION = 90        #default viewing angle for the pi & matrix
-# ORIENTATION = 270        #default viewing angle for the pi & matrix
-                         #set this value according to your viewing angle
-                         #values are  0 (power jack on left)
-                         #           90 (power jack on bottom)
-                         #          180 (power jack on right)
-                         #          270 (power jack on top)
-
 rows   = 0x00            #starting pattern is (0,0) = all LEDS off
 columns= 0x00
 delay  = 0.07            #time delay between LED display transitions
@@ -48,37 +39,6 @@ delay  = 0.07            #time delay between LED display transitions
 #   Lower level routines for bit-manipulation.
 #   Nothing here relates to our snazzy Pi Matrix.
 #
-
-def ReverseBits (byte):
-    print "ReverseBits"
-    #reverse the order of bits in the byte: bit0 <->bit 7, bit1 <-> bit6, etc.
-    value = 0
-    currentBit = 7
-    for i in range(0,8):
-        if byte & (1<<i):
-            value |= (0x80>>i)
-            currentBit -= 1
-    return value
-
-def ROR (byte):
-    print "ROR"
-    #perform a 'rotate right' command on byte
-    #bit 1 is rotated into bit 7; everything else shifted right
-    bit1 = byte & 0x01          #get right-most bit
-    byte >>= 1                  #shift right 1 bit
-    if bit1:                    #was right-most bit a 1?
-        byte |= 0x80            #if so, rotate it into bit 7
-    return byte
-    
-def ROL (byte):
-    print "ROL"
-    #perform a 'rotate left' command on byte
-    #bit 7 is rotated into bit 1; everything else shifted left
-    bit7 = byte & 0x080         #get bit7
-    byte <<= 1                  #shift left 1 bit
-    if bit7:                    #was bit7 a 1?
-        byte |= 0x01            #if so, rotate it into bit 1
-    return byte
 
 
 ########################################################################
@@ -101,25 +61,14 @@ def EnableLEDS ():
     Write(DIRB, 0x00)           #all zeros = all outputs on PortB
 
 def DisableLEDS ():
-    print "DisableLEDS"
-    #Set all outputs to high-impedance by making them inputs
-    Write(DIRA, 0xFF);          #all ones = all inputs on PortA
-    Write(DIRB, 0xFF);          #all ones = all inputs on PortB
+#    print "DisableLEDS"
+    #Set up the 23017 for 16 output pins
+    Write(DIRA, 0xff)           #all zeros = all outputs on PortA
+    Write(DIRB, 0xff)           #all zeros = all outputs on PortB
 
-def TurnOffLEDS ():
-    print "TurnOffLEDS"
-    #Clear the matrix display
-    Write(PORTA, 0x00)          #set all columns low
-    Write(PORTB, 0x00)          #set all rows low
-    
-def TurnOnAllLEDS ():
-    print "TurnOnAllLEDS"
-    #Turn on all 64 LEDs
-    Write(PORTA, 0xFF)          #set all columns high
-    Write(PORTB, 0x00)          #set all rows low
     
 def WriteToLED (rowPins,colPins):
-    print "WriteToLED"
+#    print "WriteToLED"
     #set logic state of LED matrix pins
     Write(PORTA, 0x00)          #turn off all columns; prevent ghosting
     Write(PORTB, rowPins)       #set rows first
@@ -132,7 +81,7 @@ def WriteToLED (rowPins,colPins):
 #   LED Pixel, Row, Column, and Pattern display
 #
 
-def SetPattern (rowPattern,colPattern,orientation=ORIENTATION):
+def SetPattern (rowPattern,colPattern):
 #    print "SetPattern"
     #Applies given row & column patterns to the matrix.
     #For columns, bit 0 is left-most and bit 7 is at far right.
@@ -147,14 +96,7 @@ def SetPattern (rowPattern,colPattern,orientation=ORIENTATION):
     rows = rowPattern
     columns = colPattern
     
-    if orientation==0:
-        WriteToLED(~rows,ReverseBits(columns))
-    elif orientation==90:
-        WriteToLED(~columns,rows)
-    elif orientation==180:
-        WriteToLED(~ReverseBits(rows),columns)
-    elif orientation==270:
-        WriteToLED(~ReverseBits(columns),ReverseBits(rows))
+    WriteToLED(~columns,rows)
 
 def MultiplexDisplay (z,count):
 #    print "MultiplexDisplay"
@@ -192,6 +134,8 @@ def BinClock ():
 bus = smbus.SMBus(1)            #initialize the I2 bus; use '0' for
                                 #older Pi boards, '1' for newer ones.
 EnableLEDS()                    #initialize the Pi Matrix board
-while True:
-	BinClock()               #Display BCD on matrix
-DisableLEDS()                   #dont leave any LEDs on.
+try:
+	while True:
+		BinClock()               #Display BCD on matrix
+except:
+	DisableLEDS()                   #dont leave any LEDs on.

@@ -1,4 +1,7 @@
 .PRECIOUS: %.o
+TARGET=gpiolcd
+OBJS=ipLcd.o gpioLcd.o commonLcd.o gpiomain.o
+LIBS=-lwiringPi
 ifdef SPI
 TARGET=spilcd
 OBJS=ipLcd.o spiLcd.o commonLcd.o spimain.o
@@ -7,10 +10,6 @@ endif
 ifdef I2C
 TARGET=i2clcd
 OBJS=ipLcd.o i2cLcd.o commonLcd.o i2cmain.o
-else
-TARGET=gpiolcd
-OBJS=ipLcd.o gpioLcd.o commonLcd.o gpiomain.o
-LIBS=-lwiringPi
 endif
 
 #all:

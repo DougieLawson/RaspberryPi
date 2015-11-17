@@ -6,12 +6,13 @@
 #include <stdint.h>
 #include <time.h>
 #include <sys/ioctl.h>
-//#include <linux/i2c.h>
-#include <linux/i2c-dev.h>
+//#include "linux/i2c.h"
+#include "linux/i2c-dev.h"
 #include "hd44780.h"
 #include "commonLcd.h"
 #include "i2cLcd.h"
 
+static char *i2cDevice = "/dev/i2c-1";
 int i2c_open(char* dev)
 {
   if((i2c_fd = open(dev, O_RDWR)) < 0)

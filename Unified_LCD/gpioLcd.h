@@ -18,12 +18,12 @@
 //#define LCD_ENTRYINCREMENT 0x02 //the the display is shifted left if LCD_SHIFTENTRY is set or right if LCD_NOSHIFTENTRY is set
 
 //display control flags
-#define LCD_DISPLAYON 0x04
-#define LCD_DISPLAYOFF 0x00
-#define LCD_HIDECURSOR 0x00
-#define LCD_SHOWCURSOR 0x02
-#define LCD_CURSORBLINKON 0x01
-#define LCD_CURSORBLINKOFF 0x00
+//#define LCD_DISPLAYON 0x04
+//#define LCD_DISPLAYOFF 0x00
+//#define LCD_HIDECURSOR 0x00
+//#define LCD_SHOWCURSOR 0x02
+//#define LCD_CURSORBLINKON 0x01
+//#define LCD_CURSORBLINKOFF 0x00
 
 //cursor/display flags
 //#define LCD_MOVECURSOR 0x00

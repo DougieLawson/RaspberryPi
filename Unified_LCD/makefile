@@ -9,6 +9,7 @@ LIBS=
 endif
 ifdef I2C
 TARGET=i2clcd
+LIBS=
 OBJS=ipLcd.o i2cLcd.o commonLcd.o i2cmain.o
 endif
 

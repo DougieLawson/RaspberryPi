@@ -11,6 +11,12 @@
 #include "commonLcd.h"
 #include "spiLcd.h"
 
+static char *spiDevice = "/dev/spidev0.1";
+//static uint8_t spiMode = 0;
+static uint8_t spiBPW = 8;
+static uint32_t spiSpeed = 5000000;
+static uint16_t spiDelay = 0;
+
 int spi_open(char* dev)
 {
   if((spi_fd = open(dev, O_RDWR)) < 0)

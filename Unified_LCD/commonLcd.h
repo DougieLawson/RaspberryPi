@@ -3,12 +3,12 @@
 
 //Lcd instructions
 #define LCD_CLEARDISPLAY 0x01
-//#define LCD_RETURNHOME 0x02
-//#define LCD_ENTRYMODESET 0x04
-//#define LCD_DISPLAYCONTROL 0x08
+#define LCD_RETURNHOME 0x02
+#define LCD_ENTRYMODESET 0x04
+#define LCD_DISPLAYCONTROL 0x08
 #define LCD_CURSORSHIFT 0x10
-//#define LCD_FUNCTIONSET 0x20
-//#define LCD_CGRAMADDRESS 0x40
+#define LCD_FUNCTIONSET 0x20
+#define LCD_CGRAMADDRESS 0x40
 #define LCD_DDRAMADDRESS 0x80
 
 //display entry mode flags
@@ -18,15 +18,15 @@
 //#define LCD_ENTRYINCREMENT 0x02 //the the display is shifted left if LCD_SHIFTENTRY is set or right if LCD_NOSHIFTENTRY is set
 
 //display control flags
-//#define LCD_DISPLAYON 0x04
-//#define LCD_DISPLAYOFF 0x00
-//#define LCD_HIDECURSOR 0x00
-//#define LCD_SHOWCURSOR 0x02
-//#define LCD_CURSORBLINKON 0x01
-//#define LCD_CURSORBLINKOFF 0x00
+#define LCD_DISPLAYON 0x04
+#define LCD_DISPLAYOFF 0x00
+#define LCD_HIDECURSOR 0x00
+#define LCD_SHOWCURSOR 0x02
+#define LCD_CURSORBLINKON 0x01
+#define LCD_CURSORBLINKOFF 0x00
 
 //cursor/display flags
-//#define LCD_MOVECURSOR 0x00
+#define LCD_MOVECURSOR 0x00
 #define LCD_SHIFTDISPLAY 0x08
 #define LCD_LEFT 0x00
 #define LCD_RIGHT 0x04
@@ -52,5 +52,6 @@ void clearDisplay(hd44780 * header);
 void cursorControl(hd44780 * header, int state);
 void cursorBlink(hd44780 * header, int state);
 void printInt32(hd44780 * header, int val);
+void defineCGChars (hd44780 * header, char array[8][8]);
 
 #endif

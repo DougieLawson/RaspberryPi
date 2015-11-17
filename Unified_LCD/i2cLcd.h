@@ -79,7 +79,6 @@
 //#define OLATA    0x14
 #define OLATB    0x15
 
-static char *i2cDevice = "/dev/i2c-1";
 int gpio_reg;
 int i2c_fd;
 

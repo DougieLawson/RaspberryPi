@@ -78,12 +78,6 @@
 //#define OLATA    0x14
 #define OLATB    0x15
 
-static char *spiDevice = "/dev/spidev0.1";
-//static uint8_t spiMode = 0;
-static uint8_t spiBPW = 8;
-static uint32_t spiSpeed = 5000000;
-static uint16_t spiDelay = 0;
-
 int gpio_reg;
 int spi_fd;
 

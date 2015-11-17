@@ -96,9 +96,9 @@ void cursorControl(hd44780 * header, int state)
 	if(!header)
 		return;
 	if (state)
-        	header->displayControl = (header->displayControl | LCD_DISPLAYCONTROL) | LCD_SHOWCURSOR;
+        	header->displayControl = (header->displayControl | LCD_DISPLAYON | LCD_DISPLAYCONTROL | LCD_SHOWCURSOR);
 	else
-		header->displayControl = (header->displayControl | LCD_DISPLAYCONTROL) & ~LCD_SHOWCURSOR;  
+		header->displayControl = (header->displayControl | LCD_DISPLAYON | LCD_DISPLAYCONTROL | LCD_HIDECURSOR) & ~LCD_SHOWCURSOR;  
 	writeBytes(header, header->displayControl, LCD_COMMAND_MODE);
 }
 
@@ -107,9 +107,9 @@ void cursorBlink(hd44780 * header, int state)
 	if(!header)
 		return;
 	if (state)
-	        header->displayControl = (header->displayControl | LCD_DISPLAYCONTROL) | LCD_CURSORBLINKON;
+	        header->displayControl = (header->displayControl | LCD_DISPLAYON | LCD_DISPLAYCONTROL | LCD_CURSORBLINKON);
 	else
-        	header->displayControl = (header->displayControl | LCD_DISPLAYCONTROL) & ~LCD_CURSORBLINKON;
+        	header->displayControl = (header->displayControl | LCD_DISPLAYON| LCD_DISPLAYCONTROL | LCD_CURSORBLINKOFF) & ~LCD_CURSORBLINKON;
 	writeBytes(header, header->displayControl, LCD_COMMAND_MODE);
 }
 
@@ -129,6 +129,21 @@ void printInt32(hd44780 * header, int val)
 		else
 			writeBytes(header, 0x30, LCD_CHARACTER_MODE);
 
+	}
+}
+
+void defineCGChars (hd44780 * header, char array[8][8])
+{
+	char CGbyte;
+	int i, j;
+	for (i=0; i<8; i++)
+	{
+		CGbyte = LCD_CGRAMADDRESS | (i << 3);
+		writeBytes(header, CGbyte , LCD_COMMAND_MODE);
+		for (j=0; j<8; j++)
+		{
+			writeBytes(header, array[i][j], LCD_CHARACTER_MODE);
+		}
 	}
 }
 

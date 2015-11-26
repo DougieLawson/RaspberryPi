@@ -1,5 +1,5 @@
-Unified LCD driver
-==================
+PiFaceCAD FTSE Stock Ticker
+===========================
 
 Copyright &copy; Dougie Lawson 2014-2015, all rights reserved.
  

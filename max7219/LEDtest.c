@@ -1,4 +1,3 @@
-// Copyright 2016, Dougie Lawson all rights reserved
 #include <stdio.h>
 #include <unistd.h>
 #include <stdint.h>

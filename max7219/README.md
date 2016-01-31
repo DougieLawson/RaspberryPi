@@ -10,4 +10,4 @@ This work is licensed under the Creative Commons Attribution-NonCommercial-Share
 [creativecommons.org]:http://creativecommons.org/licenses/by-nc-sa/4.0/deed.en_GB.  
 
 The sqlF.c program needs libsqlite3-dev installed.
-The LEDmain.c program is just an example
+The LEDtest.c & sqlTest.c programs are just examples

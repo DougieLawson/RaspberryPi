@@ -41,7 +41,7 @@ void writeByte(uint8_t reg, uint8_t data)
   ioctl(spi_fd, SPI_IOC_MESSAGE(1), &spi);
 }
 
-void initialiseDisplay(max7219 * header)
+void initialiseDisplay(max7219 *header)
 {
   spiOpen(spiDevice);
 
@@ -49,9 +49,10 @@ void initialiseDisplay(max7219 * header)
   writeBytes(header, MAX7219_REG_DECODEMODE, 0xff);
   writeBytes(header, MAX7219_REG_SHUTDOWN, 1);
   writeBytes(header, MAX7219_REG_DISPLAYTEST, 0);
+  setBrightness(header, 5);
 }
 
-void writeBytes(max7219 * header, int cmd, int data)
+void writeBytes(max7219 *header, int cmd, int data)
 {
   if(!header) return;
   writeByte(cmd, data);
@@ -70,7 +71,7 @@ void byte_to_binary(int x)
     printf("%s", b);
 }
 
-void clearDisplay(max7219 * header)
+void clearDisplay(max7219 *header)
 {
   int i;
   if(!header) return; 
@@ -80,7 +81,7 @@ void clearDisplay(max7219 * header)
   digitDisplay(header);
 }
 
-void writeDigits(max7219 * header, char chars[12])
+void writeDigits(max7219 *header, char chars[12])
 {
   int i,j;
   if (!header) return;
@@ -90,45 +91,35 @@ void writeDigits(max7219 * header, char chars[12])
   {
     if ((int)chars[j] >= 0x30 && (int)chars[j] <= 0x39 )
     {
-      // chars[j] between 0 and 9
       header->digits[i] = asciiToBCD(chars[j]);
       j++;
       i--;
     }
     else if ((int)chars[j] == 0x20 ) 
     {
-      // chars[j] is space
       header->digits[i] = 0x0F;
       j++;
       i--;
     }
     else if ((int)chars[j] == 0x2d)
     {
-      // chars[j] is minus (-)
       header->digits[i] = 0x0a;
       j++;
       i--;
     }
     else if ((int)chars[j] == 0x3a)
     {
-      // chars[j] is colon (:)
-      // set it to space + DP
       header->digits[i] = 0x8f;
       j++;
       i--;
     } 
     else if ((int)chars[j] == 0x2e)
     {
-      // chars[j] is full stop (.)
-      // so activate the DP (bit 7) on left hand digit
       header->digits[i+1] = header->digits[i+1] + 0x80;
       j++;
-      // digits index isn't incremented
     }
     else if ((int)chars[j] == 0x00)
     {
-      // chars[j] is a NULL
-      // That's it we're done, set both indices so we terminate the loop
       j = 12;
       i = -1;
     }
@@ -141,7 +132,7 @@ void writeDigits(max7219 * header, char chars[12])
   digitDisplay(header);
 }
 
-void digitDisplay(max7219 * header)
+void digitDisplay(max7219 *header)
 {
   int i;
   if(!header) return;
@@ -150,6 +141,15 @@ void digitDisplay(max7219 * header)
     writeBytes(header, i+1, header->digits[i]);
   }
 
+}
+
+void setBrightness(max7219 *header, int bright)
+{
+  if(!header) return;
+  if (bright < 0) bright = 0;
+  if (bright > 15) bright = 15;
+ 
+  writeBytes(header, MAX7219_REG_INTENSITY, bright);
 }
 
 uint8_t asciiToBCD (uint8_t chr) 

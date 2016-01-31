@@ -1,3 +1,4 @@
+// (C) Copyright 2016, Dougie Lawson. All rights reserved.
 #include <stdio.h>
 #include <stdlib.h>
 #include <sqlite3.h> 
@@ -7,7 +8,7 @@
 #include <math.h>
 #include "max7219.h"
 #include "spiLED.h"
-#define ALTITUDE 112.2 // FIXME change to local altitude 
+#define ALTITUDE 112.2 
 
 max7219 header;
 static int callback(void *data, int argc, char **argv, char **azColName){
@@ -24,11 +25,16 @@ static int callback(void *data, int argc, char **argv, char **azColName){
    for(i=0; i<argc; i++){
       if (strcmp(azColName[i], "date_time") == 0) 
       {
+        // Date & time format is yyyy-mm-dd hh:mm:ss
+        // Split that into 
+        // Date (token1): yy-mm-dd
+        // Time (token2): hh:mm:ss
         clearDisplay(&header);
         sprintf(chars, "%s", argv[i]);
         token1 = strsep(&stringp, delim);
         token2 = strsep(&stringp, delim);
         
+        // Ugly use of memcpy to strip off century digits
         memcpy(chars1, &token1[2], 8);
         chars1[8] = '\0';
         writeDigits(&header, chars1);
@@ -56,6 +62,8 @@ static int callback(void *data, int argc, char **argv, char **azColName){
         writeDigits(&header, chars);
         sleep(4);
         clearDisplay(&header);
+        // Database holds pressure at local altitude
+        // Correct pressure for mean sea level
         pressureMSL = atof(chars) / powf(1 - ( ALTITUDE / 44330.0) , 5.255);
         sprintf(chars,"%4.2f", pressureMSL);
         writeDigits(&header, chars);
@@ -110,15 +118,6 @@ int main(int argc, char* argv[])
 
 
      /* Set the display brightness at dawn / dusk */
-
-     /* FIXME  Optional code to read /var/run/lightordark and 
-        alter the MAX7219 brighness register.
-
-        I have a script running sunwait that writes to /var/run/lightordark
-        at dawn and dusk */
-
-/* FIXME
-
      fp = fopen(filename,"r");
      fgets(lightordark, sizeof lightordark, fp); 
      LoDtoken = strsep(&LoDstringp, delim);
@@ -129,7 +128,6 @@ int main(int argc, char* argv[])
      setBrightness(&header, bright);
      fclose(fp);
      LoDstringp = lightordark;
-FIXME */
 
    }
    return 0;

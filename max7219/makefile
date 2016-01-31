@@ -2,7 +2,7 @@
 TARGET=LEDspi
 OBJS=sqlF.o spiLED.o
 LIBS=-lsqlite3
-OPT=
+OPT=-g
 
 #all:
 #	echo $(TARGET) $(OBJS)

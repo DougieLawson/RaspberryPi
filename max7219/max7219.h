@@ -1,3 +1,4 @@
+// (C) Copyright 2016, Dougie Lawson. All rights reserved.
 #ifndef MAX7219_H
 #define MAX7219_H
 

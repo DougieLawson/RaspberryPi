@@ -1,3 +1,4 @@
+// (C) Copyright 2016, Dougie Lawson. All rights reserved.
 #include <fcntl.h>
 #include <string.h>
 #include <stdio.h>

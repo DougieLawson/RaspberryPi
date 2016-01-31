@@ -1,3 +1,4 @@
+// (C) Copyright 2016, Dougie Lawson. All rights reserved.
 #include <stdio.h>
 #include <unistd.h>
 #include <stdint.h>

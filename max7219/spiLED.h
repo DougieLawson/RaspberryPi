@@ -1,3 +1,4 @@
+// (C) Copyright 2016, Dougie Lawson. All rights reserved.
 #ifndef SPILED_H
 #define SPILED_H
 

@@ -1,0 +1,10 @@
+cmake_minimum_required (VERSION 2.8.11)
+project (LEDspi)
+add_executable(LEDspi sqlF.c spiLED.c)
+add_executable(SQLTest sqlTest.c)
+add_executable(LEDtest LEDtest.c spiLED.c)
+find_path(SQLITE3_INCLUDE_DIR sqlite3.h)
+find_library(SQLITE3_LIBRARY sqlite3)
+
+target_link_libraries(LEDspi ${SQLITE3_LIBRARY})
+target_link_libraries(SQLTest ${SQLITE3_LIBRARY})

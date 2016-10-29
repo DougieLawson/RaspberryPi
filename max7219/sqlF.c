@@ -1,3 +1,4 @@
+
 // (C) Copyright 2016, Dougie Lawson. All rights reserved.
 #include <stdio.h>
 #include <stdlib.h>
@@ -6,11 +7,23 @@
 #include <unistd.h>
 #include <stdint.h>
 #include <math.h>
+#include <signal.h>
 #include "max7219.h"
 #include "spiLED.h"
 #define ALTITUDE 112.2 
 
 max7219 header;
+struct sigaction act;
+
+void sig_handler(int signum, siginfo_t *info, void *ptr)
+{
+   clearDisplay(&header);
+   printf("Received signal %d\n", signum);
+   printf("Signal originated from process %lu\n",
+     (unsigned long)info->si_pid);
+   exit(0);
+}
+
 static int callback(void *data, int argc, char **argv, char **azColName){
    int i;
    char chars[30];
@@ -79,6 +92,12 @@ static int callback(void *data, int argc, char **argv, char **azColName){
 
 int main(int argc, char* argv[])
 {
+   memset(&act, 0, sizeof(act));
+ 
+   act.sa_sigaction = sig_handler;
+   act.sa_flags = SA_SIGINFO;
+   sigaction(SIGTERM, &act, NULL);
+
    sqlite3 *db;
    FILE *fp;
    int rc;
@@ -88,6 +107,8 @@ int main(int argc, char* argv[])
    char *sql;
    char *LoDstringp = lightordark;
    char *LoDtoken;
+   char *LoDtime;
+   char charst[30];
 
    const char filename[21] = "/var/run/lightordark";
    const char *delim = " ";
@@ -121,8 +142,13 @@ int main(int argc, char* argv[])
      fp = fopen(filename,"r");
      fgets(lightordark, sizeof lightordark, fp); 
      LoDtoken = strsep(&LoDstringp, delim);
+     LoDtime = strsep(&LoDstringp, delim); /* skip @ */
+     LoDtime = strsep(&LoDstringp, delim); /* got Time */
+     sprintf(charst,"%8s",LoDtime);
+     writeDigits(&header, charst);
+     sleep(4);
 
-     if (strcmp(LoDtoken, "dark") == 0) bright = 10;
+     if (strcmp(LoDtoken, "dark") == 0) bright = 7;
      else bright = 3;
 
      setBrightness(&header, bright);

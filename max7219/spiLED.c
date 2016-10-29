@@ -9,7 +9,7 @@
 #include "max7219.h"
 #include "spiLED.h"
 
-static char *spiDevice = "/dev/spidev0.0";
+static char *spiDevice = "/dev/spidev0.1";
 static uint8_t spiBPW = 8;
 static uint32_t spiSpeed = 5000000;
 static uint16_t spiDelay = 0;
@@ -90,46 +90,50 @@ void writeDigits(max7219 *header, char chars[12])
   j = 0;
   while (j <= 11 && i >= 0)
   {
-    if ((int)chars[j] >= 0x30 && (int)chars[j] <= 0x39 )
-    {
+    switch ((int)chars[j]) {
+    case '0':
+    case '1':
+    case '2':
+    case '3':
+    case '4':
+    case '5':
+    case '6':
+    case '7':
+    case '8':
+    case '9':
+  
       header->digits[i] = asciiToBCD(chars[j]);
       j++;
       i--;
-    }
-    else if ((int)chars[j] == 0x20 ) 
-    {
+      break;
+    case ' ':
       header->digits[i] = 0x0F;
       j++;
       i--;
-    }
-    else if ((int)chars[j] == 0x2d)
-    {
+      break;
+    case '-':
       header->digits[i] = 0x0a;
       j++;
       i--;
-    }
-    else if ((int)chars[j] == 0x3a)
-    {
+      break;
+    case ':':
       header->digits[i] = 0x8f;
       j++;
       i--;
-    } 
-    else if ((int)chars[j] == 0x2e)
-    {
+      break;
+    case '.':
       header->digits[i+1] = header->digits[i+1] + 0x80;
       j++;
-    }
-    else if ((int)chars[j] == 0x00)
-    {
+      break;
+    case 0x00:
       j = 12;
       i = -1;
-    }
-    else 
-    {
+      break; 
+    default:
       j++;
+      break;
     }
   }
-
   digitDisplay(header);
 }
 
@@ -141,7 +145,6 @@ void digitDisplay(max7219 *header)
   {
     writeBytes(header, i+1, header->digits[i]);
   }
-
 }
 
 void setBrightness(max7219 *header, int bright)

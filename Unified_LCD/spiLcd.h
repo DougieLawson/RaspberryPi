@@ -86,8 +86,8 @@ int spi_fd;
 //typedef enum {DISPLAY_SCROLLEFT,DISPLAY_SCROLLRIGHT} displayScroll;
 //typedef enum {LCD_COMMAND_MODE, LCD_CHARACTER_MODE} modes;
 
-//void setDefaultHd44780(hd44780 * toDefault);
-void initializeDisplay(hd44780 * header);
+void setDefaultHd44780(hd44780 * header);
+void initialiseDisplay(hd44780 * header);
 void writeBytes(hd44780 * header, int byte, int mode);
 
 #endif

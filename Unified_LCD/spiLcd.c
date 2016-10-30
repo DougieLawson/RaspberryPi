@@ -55,7 +55,27 @@ static void writeByte(uint8_t reg, uint8_t data)
   ioctl(spi_fd, SPI_IOC_MESSAGE(1), &spi);
 }
 
-void initializeDisplay(hd44780 * header)
+static void pulse(hd44780 * header)
+{
+	delay(1);
+	gpio_reg &= (0xff -(1 << PIN_ENABLE));
+        writeByte(OLATB, gpio_reg);
+	delay(1);
+	gpio_reg |= 1 << PIN_ENABLE;
+        writeByte(OLATB, gpio_reg);
+	delay(1);
+	gpio_reg &= (0xff -(1 << PIN_ENABLE));
+        writeByte(OLATB, gpio_reg);
+	delay(1);
+
+}
+
+void setDefaultHd44780(hd44780 * header)
+{
+	return;
+}
+
+void initialiseDisplay(hd44780 * header)
 {
 	header->colNumber = 2;
 	header->rowNumber = 16;
@@ -70,21 +90,6 @@ void initializeDisplay(hd44780 * header)
 
 	header->displayControl = (header->displayControl | LCD_DISPLAYCONTROL) | LCD_DISPLAYON;
 	writeBytes(header, header->displayControl, LCD_COMMAND_MODE);
-}
-
-static void pulse(hd44780 * header)
-{
-	delay(1);
-	gpio_reg &= (0xff -(1 << PIN_ENABLE));
-        writeByte(OLATB, gpio_reg);
-	delay(1);
-	gpio_reg |= 1 << PIN_ENABLE;
-        writeByte(OLATB, gpio_reg);
-	delay(1);
-	gpio_reg &= (0xff -(1 << PIN_ENABLE));
-        writeByte(OLATB, gpio_reg);
-	delay(1);
-
 }
 
 void writeBytes(hd44780 * header, int byte, int mode)

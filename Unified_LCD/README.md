@@ -1,7 +1,7 @@
 Unified LCD driver
 ==================
 
-Copyright &copy; Dougie Lawson 2015, all rights reserved.
+Copyright &copy; Dougie Lawson 2015,2016, all rights reserved.
  
 This work is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.
  
@@ -9,8 +9,9 @@ This work is licensed under the Creative Commons Attribution-NonCommercial-Share
    
 [creativecommons.org]:http://creativecommons.org/licenses/by-nc-sa/4.0/deed.en_GB.  
 
-To build for GPIO use
+To build
 ```
+cmake .
 make
 ```
 The LCD needs to be wired as
@@ -25,13 +26,15 @@ The LCD needs to be wired as
  
 To build for SPI (MCP23S17) use
 ```
-SPI=Y make
+cmake .
+make
 ```
 
 To build for I2C (MCP23017) use
 ```
 sudo apt-get install libi2c-dev
-I2C=Y make
+cmake .
+make
 ```
 
 For both MCP23x17 GPIO chips the LCD needs to be wired as

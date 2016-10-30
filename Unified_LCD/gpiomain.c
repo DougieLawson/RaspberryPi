@@ -1,16 +1,36 @@
 #include <stdlib.h>
 #include <unistd.h>
+#include <signal.h>
+#include <string.h>
 #include "hd44780.h"
 #include "commonLcd.h"
 #include "gpioLcd.h"
 #include "ipLcd.h"
 
+hd44780 header;
+struct sigaction act;
+
+void sig_handler(int signum, siginfo_t *info, void *ptr)
+{
+  initialiseDisplay(&header);
+  clearDisplay(&header);
+  moveCursor(&header,CURSOR_HOME);
+  cursorControl(&header,0);
+  cursorBlink(&header,0);
+
+}
+
 int main()
 {
+  memset(&act, 0, sizeof(act));
 
-  hd44780 header;
+  act.sa_sigaction = sig_handler;
+  act.sa_flags = SA_SIGINFO;
+  sigaction(SIGUSR1, &act, NULL);
+  sigaction(SIGUSR2, &act, NULL);
+
   setDefaultHd44780(&header);
-  initializeDisplay(&header);
+  initialiseDisplay(&header);
   clearDisplay(&header);
   moveCursor(&header,CURSOR_HOME);
   cursorControl(&header,0);

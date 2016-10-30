@@ -55,8 +55,8 @@
 //#define CMD_WRITE 0x40
 //#define CMD_READ  0x41
 
-#define I2C_ADDR 0x20
-//#define IODIRA   0x00
+#define I2C_ADDR 0x27
+#define IODIRA   0x00
 #define IODIRB   0x01
 //#define IPOLA    0x02
 //#define IPOLB    0x03
@@ -76,7 +76,7 @@
 //#define INTCAPB  0x11
 //#define GPIOA    0x12
 //#define GPIOB    0x13
-//#define OLATA    0x14
+#define OLATA    0x14
 #define OLATB    0x15
 
 int gpio_reg;
@@ -87,8 +87,8 @@ int i2c_fd;
 //typedef enum {DISPLAY_SCROLLEFT,DISPLAY_SCROLLRIGHT} displayScroll;
 //typedef enum {LCD_COMMAND_MODE, LCD_CHARACTER_MODE} modes;
 
-//void setDefaultHd44780(hd44780 * toDefault);
-void initializeDisplay(hd44780 * header);
+void setDefaultHd44780(hd44780 * header);
+void initialiseDisplay(hd44780 * header);
 void writeBytes(hd44780 * header, int byte, int mode);
 
 #endif

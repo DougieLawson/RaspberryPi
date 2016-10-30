@@ -7,37 +7,37 @@
 #include "gpioLcd.h"
 #include "wiringPi.h"
 
-void setDefaultHd44780(hd44780 * toDefault)
-{
-	if(!toDefault)
-		return;
-	toDefault->D4 = 13;
-	toDefault->D5 = 6;
-	toDefault->D6 = 5;
-	toDefault->D7 = 12;
-
-	toDefault->registerSelect = 26;
-	toDefault->enable = 16;
-
-	toDefault->colNumber = 2;
-	toDefault->rowNumber = 16;
-
-}
-
-void initializeDisplay(hd44780 * header)
+void setDefaultHd44780(hd44780 * header)
 {
 	if(!header)
 		return;
+	header->D4 = 13;
+	header->D5 = 6;
+	header->D6 = 5;
+	header->D7 = 12;
+
+	header->registerSelect = 26;
+	header->enable = 16;
+
+	header->colNumber = 2;
+	header->rowNumber = 16;
+
+        setenv("WIRINGPI_GPIOMEM", "1", 1);
 	wiringPiSetupGpio();
 
 	pinMode(header->D4,OUTPUT);
 	pinMode(header->D5,OUTPUT);
 	pinMode(header->D6,OUTPUT);
 	pinMode(header->D7,OUTPUT);
-
 	pinMode(header->registerSelect,OUTPUT);
 	pinMode(header->enable,OUTPUT);
 
+}
+
+void initialiseDisplay(hd44780 * header)
+{
+	if(!header)
+		return;
 
 	writeBytes(header, 0b00110011, LCD_COMMAND_MODE);
 	writeBytes(header, 0b00110000, LCD_COMMAND_MODE);

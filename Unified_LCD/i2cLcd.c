@@ -28,7 +28,6 @@ int i2c_open(char* dev)
   return 0;
 }
 
-
 void delay (unsigned int howLong)
 {
   struct timespec sleeper, dummy ;
@@ -44,14 +43,34 @@ static void writeByte(uint8_t reg, uint8_t data)
   i2c_smbus_write_byte_data(i2c_fd, reg, data);
 }
 
-void initializeDisplay(hd44780 * header)
+static void pulse(hd44780 * header)
+{
+	delay(1);
+	gpio_reg &= (0xff -(1 << PIN_ENABLE));
+        writeByte(OLATA, gpio_reg);
+	delay(1);
+	gpio_reg |= 1 << PIN_ENABLE;
+        writeByte(OLATA, gpio_reg);
+	delay(1);
+	gpio_reg &= (0xff -(1 << PIN_ENABLE));
+        writeByte(OLATA, gpio_reg);
+	delay(1);
+
+}
+
+void setDefaultHd44780(hd44780 * header)
+{
+	return;
+}
+
+void initialiseDisplay(hd44780 * header)
 {
 	header->colNumber = 2;
 	header->rowNumber = 16;
 	i2c_open(i2cDevice);
-        writeByte(IODIRB,0x00);
+        writeByte(IODIRA,0x00);
 	gpio_reg |= 1 << PIN_BACKLIGHT;
-        writeByte(OLATB, gpio_reg);
+        writeByte(OLATA, gpio_reg);
 
 	writeBytes(header, 0b00110011, LCD_COMMAND_MODE);
 	writeBytes(header, 0b00110000, LCD_COMMAND_MODE);
@@ -61,28 +80,13 @@ void initializeDisplay(hd44780 * header)
 	writeBytes(header, header->displayControl, LCD_COMMAND_MODE);
 }
 
-static void pulse(hd44780 * header)
-{
-	delay(1);
-	gpio_reg &= (0xff -(1 << PIN_ENABLE));
-        writeByte(OLATB, gpio_reg);
-	delay(1);
-	gpio_reg |= 1 << PIN_ENABLE;
-        writeByte(OLATB, gpio_reg);
-	delay(1);
-	gpio_reg &= (0xff -(1 << PIN_ENABLE));
-        writeByte(OLATB, gpio_reg);
-	delay(1);
-
-}
-
 void writeBytes(hd44780 * header, int byte, int mode)
 {
 	if(!header)
 		return;
 
 	gpio_reg |= mode << PIN_RS;
-	writeByte(OLATB, gpio_reg);
+	writeByte(OLATA, gpio_reg);
 	delay(1);
 
 	gpio_reg = gpio_reg | (byte >> 4);

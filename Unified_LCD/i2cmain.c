@@ -10,8 +10,8 @@ int main()
 {
 
   hd44780 header;
-//  setDefaultHd44780(&header);
-  initializeDisplay(&header);
+  setDefaultHd44780(&header);
+  initialiseDisplay(&header);
   clearDisplay(&header);
   moveCursor(&header,CURSOR_HOME);
   cursorControl(&header,0);

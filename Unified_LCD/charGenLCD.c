@@ -5,7 +5,15 @@
 #include <string.h>
 #include "hd44780.h"
 #include "commonLcd.h"
+#ifdef i2c
 #include "i2cLcd.h"
+#endif
+#ifdef SPI
+#include "spiLcd.h"
+#endif
+#ifdef gpio
+#include "gpioLcd.h"
+#endif
 
 char customChars[8][8] = {
 { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 },

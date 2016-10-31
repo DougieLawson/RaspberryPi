@@ -4,7 +4,15 @@
 #include <string.h>
 #include "hd44780.h"
 #include "commonLcd.h"
+#ifdef gpio
 #include "gpioLcd.h"
+#endif
+#ifdef i2c
+#include "i2cLcd.h"
+#endif
+#ifdef SPI
+#include "spiLcd.h"
+#endif
 #include "ipLcd.h"
 
 hd44780 header;

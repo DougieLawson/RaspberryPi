@@ -7,9 +7,10 @@
 #ifdef SPI
 #include "spiLcd.h"
 #endif
-#ifdef I2C
+#ifdef i2c
 #include "i2cLcd.h"
-#else
+#endif
+#ifdef gpio
 #include "gpioLcd.h"
 #endif
 

@@ -13,6 +13,7 @@ sensor.os_mode = 3
 
 sensorData = sql.connect('/srv/bmp180/sensordata.db')
 sensorData.execute("PRAGMA journal_mode=WAL")
+sensorData.execute("VACUUM")
 bmp_data = sensorData.cursor()
 
 def tick():

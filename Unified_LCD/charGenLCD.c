@@ -5,6 +5,9 @@
 #include <string.h>
 #include "hd44780.h"
 #include "commonLcd.h"
+#ifdef pcf
+#include "pcfLcd.h"
+#endif
 #ifdef i2c
 #include "i2cLcd.h"
 #endif

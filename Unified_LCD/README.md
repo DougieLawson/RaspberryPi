@@ -30,7 +30,7 @@ cmake .
 make
 ```
 
-To build for I2C (MCP23017) use
+To build for I2C (MCP23017 & PCF8574) use
 ```
 sudo apt-get install libi2c-dev
 cmake .
@@ -46,3 +46,14 @@ For both MCP23x17 GPIO chips the LCD needs to be wired as
 * D6 == B2
 * D5 == B1
 * D4 == B0
+
+For PCF8574 GPIO chips the LCD needs to match the normal backpacks
+
+* RS = P0
+* RW = P1
+* EN = P2
+* BL = P3
+* D4 = P4
+* D5 = P5
+* D6 = P6
+* D7 = P7

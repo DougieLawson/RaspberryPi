@@ -7,6 +7,9 @@
 #ifdef gpio
 #include "gpioLcd.h"
 #endif
+#ifdef pcf
+#include "pcfLcd.h"
+#endif
 #ifdef i2c
 #include "i2cLcd.h"
 #endif

@@ -1,3 +1,7 @@
+/*
+Copyright &copy; Dougie Lawson 2015-2017, all rights reserved.
+*/
+
 #ifndef SPILCD_H
 #define SPILCD_H
 

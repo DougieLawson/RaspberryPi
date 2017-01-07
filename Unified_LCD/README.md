@@ -1,7 +1,7 @@
 Unified LCD driver
 ==================
 
-Copyright &copy; Dougie Lawson 2015,2016, all rights reserved.
+Copyright &copy; Dougie Lawson 2015-2017, all rights reserved.
  
 This work is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.
  
@@ -11,10 +11,11 @@ This work is licensed under the Creative Commons Attribution-NonCommercial-Share
 
 To build
 ```
+sudo apt-get install libi2c-dev
 cmake .
 make
 ```
-The LCD needs to be wired as
+The GPIO LCD needs to be wired as
 
 * EN == GPIO16
 * RS == GPIO26
@@ -24,20 +25,7 @@ The LCD needs to be wired as
 * D4 == GPIO13
 * BL &lt;Not connected&gt; you could wire it to GPIO18 for PWM control
  
-To build for SPI (MCP23S17) use
-```
-cmake .
-make
-```
-
-To build for I2C (MCP23017 & PCF8574) use
-```
-sudo apt-get install libi2c-dev
-cmake .
-make
-```
-
-For both MCP23x17 GPIO chips the LCD needs to be wired as
+For SPI MCP23S17 GPIO chips the LCD needs to be wired as
 
 * BL == B7
 * RS == B6
@@ -47,13 +35,26 @@ For both MCP23x17 GPIO chips the LCD needs to be wired as
 * D5 == B1
 * D4 == B0
 
+For I²C MCP20S17 GPIO chips the LCD needs to be wired as
+
+* BL == A7
+* RS == A6
+* EN == A4
+* D7 == A3
+* D6 == A2
+* D5 == A1
+* D4 == A0
+
+Note: it should be a trivial change to use an MCP23008.
+
 For PCF8574 GPIO chips the LCD needs to match the normal backpacks
 
-* RS = P0
-* RW = P1
-* EN = P2
-* BL = P3
-* D4 = P4
-* D5 = P5
-* D6 = P6
-* D7 = P7
+* RS == P0
+* RW == P1
+* EN == P2
+* BL == P3
+* D4 == P4
+* D5 == P5
+* D6 == P6
+* D7 == P7
+

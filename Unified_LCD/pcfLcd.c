@@ -1,3 +1,7 @@
+/*
+Copyright &copy; Dougie Lawson 2015-2017, all rights reserved.
+*/
+
 #include <fcntl.h>
 #include <string.h>
 #include <stdlib.h>

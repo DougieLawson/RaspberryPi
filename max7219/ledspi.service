@@ -1,0 +1,17 @@
+[Unit]
+Description=LEDspi server
+After=bmp180.service sunny.service
+
+[Service]
+ExecStart=/usr/local/bin/LEDspi
+Restart=always
+User=pi
+Group=pi
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=LEDspi
+Environment=TZ=:/usr/share/zoneinfo/GB-Eire 
+
+[Install]
+WantedBy=multi-user.target
+

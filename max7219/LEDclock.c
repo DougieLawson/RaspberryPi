@@ -1,4 +1,4 @@
-// (C) Copyright 2016, Dougie Lawson. All rights reserved.
+// (C) Copyright 2017, Dougie Lawson. All rights reserved.
 #include <stdio.h>
 #include <unistd.h>
 #include <stdint.h>
@@ -7,6 +7,7 @@
 #include <signal.h>
 #include "max7219.h"
 #include "spiLED.h"
+#include <time.h>
 
 max7219 header;
 struct sigaction act;
@@ -28,16 +29,24 @@ int main()
   act.sa_flags = SA_SIGINFO;
   sigaction(SIGTERM, &act, NULL);
 
-  char chars[12] = "22:01:02";
+  char chars[12];
   initialiseDisplay(&header);
   clearDisplay(&header);
   
   while (1)
   {
+
+    time_t rawtime;
+    struct tm * timeinfo;
+
+    time (&rawtime);
+    timeinfo = localtime (&rawtime);
+
+    strftime (chars,12,"%T",timeinfo);
+
     clearDisplay(&header);
-    sleep(2);
     writeDigits(&header, chars);
-    sleep(2);
+    sleep(1);
   }
 
   return 0;

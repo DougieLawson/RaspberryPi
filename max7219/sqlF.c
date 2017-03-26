@@ -1,5 +1,4 @@
-
-// (C) Copyright 2016, Dougie Lawson. All rights reserved.
+// (C) Copyright 2016, 2017, Dougie Lawson. All rights reserved.
 #include <stdio.h>
 #include <stdlib.h>
 #include <sqlite3.h> 
@@ -36,7 +35,7 @@ static int callback(void *data, int argc, char **argv, char **azColName){
    float pressureMSL;
    
    for(i=0; i<argc; i++){
-      if (strcmp(azColName[i], "date_time") == 0) 
+      if (strcmp(azColName[i], "tstamp") == 0) 
       {
         // Date & time format is yyyy-mm-dd hh:mm:ss
         // Split that into 
@@ -127,7 +126,7 @@ int main(int argc, char* argv[])
      }
 
      /* Create SQL statement */
-     sql = "SELECT a.date_time, a.temp, a.pressure from bmp_data a where a.date_time in (select max(b.date_time) from bmp_data b);";
+     sql = "SELECT datetime(a.date_time,'localtime') as tstamp, a.temp, a.pressure from bmp_data a where a.date_time in (select max(b.date_time) from bmp_data b);";
 
      /* Execute SQL statement */
      rc = sqlite3_exec(db, sql, callback, (void*)data, &zErrMsg);

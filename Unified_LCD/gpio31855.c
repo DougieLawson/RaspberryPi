@@ -1,3 +1,7 @@
+/*
+Copyright (C) Dougie Lawson 2017, all rights reserved.
+*/
+
 #include <stdlib.h>
 #include <unistd.h>
 #include <signal.h>

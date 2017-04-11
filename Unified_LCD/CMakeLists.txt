@@ -14,6 +14,8 @@ add_executable(gpiolcd main.c gpioLcd.c ipLcd.c commonLcd.c)
 add_executable(gpioCG charGenLCD.c gpioLcd.c commonLcd.c)
 add_executable(pcflcd main.c pcfLcd.c ipLcd.c commonLcd.c)
 add_executable(pcfCG charGenLCD.c pcfLcd.c commonLcd.c)
+add_executable(gpio31855 gpio31855.c gpioLcd.c get31855.c commonLcd.c)
+add_executable(pcf31855 pcf31855.c pcfLcd.c get31855.c commonLcd.c)
 
 set_target_properties(i2clcd i2cCG PROPERTIES COMPILE_FLAGS -Di2c)
 set_target_properties(spilcd spiCG PROPERTIES COMPILE_FLAGS -DSPI)
@@ -24,3 +26,4 @@ find_library(wiringPi_LIB wiringPi)
 
 target_link_libraries(gpiolcd ${wiringPi_LIB})
 target_link_libraries(gpioCG ${wiringPi_LIB})
+target_link_libraries(gpio31855 ${wiringPi_LIB})

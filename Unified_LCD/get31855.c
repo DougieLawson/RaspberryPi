@@ -1,5 +1,5 @@
 /*
-Copyright (C) Dougie Lawson 2017, all rights reserved.
+Copyright (C) Dougie Lawson 2015-2017, all rights reserved.
 */
 
 #include <stdint.h>

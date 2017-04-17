@@ -1,5 +1,5 @@
 /*
-Copyright &copy; Dougie Lawson 2015-2017, all rights reserved.
+Copyright (C) Dougie Lawson 2015-2017, all rights reserved.
 */
 
 #include <fcntl.h>
@@ -16,7 +16,6 @@ Copyright &copy; Dougie Lawson 2015-2017, all rights reserved.
 #include "spiLcd.h"
 
 static char *spiDevice = "/dev/spidev0.1";
-//static uint8_t spiMode = 0;
 static uint8_t spiBPW = 8;
 static uint32_t spiSpeed = 5000000;
 static uint16_t spiDelay = 0;
@@ -112,4 +111,3 @@ void writeBytes(hd44780 * header, int byte, int mode)
 	pulse(header);
         gpio_reg = gpio_reg & (0xff -(1 << PIN_RS) -(0x0f));
 }
-

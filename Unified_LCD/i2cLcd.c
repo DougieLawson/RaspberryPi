@@ -1,5 +1,5 @@
 /*
-Copyright &copy; Dougie Lawson 2015-2017, all rights reserved.
+Copyright (C) Dougie Lawson 2015-2017, all rights reserved.
 */
 
 #include <fcntl.h>
@@ -10,7 +10,6 @@ Copyright &copy; Dougie Lawson 2015-2017, all rights reserved.
 #include <stdint.h>
 #include <time.h>
 #include <sys/ioctl.h>
-//#include "linux/i2c.h"
 #include "linux/i2c-dev.h"
 #include "hd44780.h"
 #include "commonLcd.h"
@@ -100,4 +99,3 @@ void writeBytes(hd44780 * header, int byte, int mode)
 	pulse(header);
         gpio_reg = gpio_reg & (0xff -(1 << PIN_RS) -(0x0f));
 }
-

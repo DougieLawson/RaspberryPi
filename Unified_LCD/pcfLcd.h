@@ -1,13 +1,9 @@
 /*
-Copyright &copy; Dougie Lawson 2015-2017, all rights reserved.
+Copyright (C) Dougie Lawson 2015-2017, all rights reserved.
 */
 
 #ifndef PCFLCD_H
 #define PCFLCD_H
-
-// pcf8574 to HD44780 pin map
-//#define HIGH 1
-//#define LOW 0
 
 #define PIN_D4 4
 #define PIN_D5 5

@@ -1,5 +1,5 @@
 /*
-Copyright &copy; Dougie Lawson 2015-2017, all rights reserved.
+Copyright (C) Dougie Lawson 2015-2017, all rights reserved.
 */
 
 #ifndef HD44780_H

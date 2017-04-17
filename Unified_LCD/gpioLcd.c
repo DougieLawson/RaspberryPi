@@ -1,5 +1,5 @@
 /*
-Copyright &copy; Dougie Lawson 2015-2017, all rights reserved.
+Copyright (C) Dougie Lawson 2015-2017, all rights reserved.
 */
 
 #include <string.h>
@@ -84,4 +84,3 @@ void writeBytes(hd44780 * header, int byte, int mode)
 
 	pulse(header);
 }
-

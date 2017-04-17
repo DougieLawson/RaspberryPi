@@ -1,5 +1,5 @@
 /*
-Copyright &copy; Dougie Lawson 2015-2017, all rights reserved.
+Copyright (C) Dougie Lawson 2015-2017, all rights reserved.
 */
 
 #include <string.h>
@@ -154,4 +154,3 @@ void defineCGChars (hd44780 * header, char array[8][8])
 		}
 	}
 }
-

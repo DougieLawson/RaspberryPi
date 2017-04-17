@@ -1,5 +1,5 @@
 /*
-Copyright &copy; Dougie Lawson 2015-2017, all rights reserved.
+Copyright (C) Dougie Lawson 2015-2017, all rights reserved.
 */
 
 #include <stdlib.h>
@@ -53,11 +53,7 @@ int main()
     for (j=1; j<6; j++)
     {
       sprintf(jString, "%c", j);
-//    printf("Mainloop");
-//    printf("I:=%i, J:=%i", i, j);
-//    printf(" jString:= %s", jString);
       displayStr[i] = jString[0];
-//    printf("\r\n");
       clearDisplay(&header);
       printString(&header, displayStr);
       sleep(2);

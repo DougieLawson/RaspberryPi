@@ -45,9 +45,9 @@ initialiseDisplay (hd44780 * header)
   if (!header)
     return;
 
-  writeBytes (header, 0 b00110011, LCD_COMMAND_MODE);
-  writeBytes (header, 0 b00110000, LCD_COMMAND_MODE);
-  writeBytes (header, 0 b00000110, LCD_COMMAND_MODE);
+  writeBytes (header, 0b00110011, LCD_COMMAND_MODE);
+  writeBytes (header, 0b00110000, LCD_COMMAND_MODE);
+  writeBytes (header, 0b00000110, LCD_COMMAND_MODE);
 
   header->displayControl =
     (header->displayControl | LCD_DISPLAYCONTROL) | LCD_DISPLAYON;

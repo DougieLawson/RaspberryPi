@@ -42,11 +42,11 @@ moveCursor (hd44780 * header, cursorMovement movement)
     return;
 
   if (movement == CURSOR_RIGHT)
-    writeBytes (header, 0 b00010100, LCD_COMMAND_MODE);
+    writeBytes (header, 0b00010100, LCD_COMMAND_MODE);
   else if (movement == CURSOR_LEFT)
-    writeBytes (header, 0 b00010000, LCD_COMMAND_MODE);
+    writeBytes (header, 0b00010000, LCD_COMMAND_MODE);
   else
-    writeBytes (header, 0 b00000010, LCD_COMMAND_MODE);
+    writeBytes (header, 0b00000010, LCD_COMMAND_MODE);
 
 }
 

@@ -29,18 +29,21 @@ Copyright (C) Dougie Lawson 2015-2017, all rights reserved.
 #define LCD_LEFT 0x00
 #define LCD_RIGHT 0x04
 
-typedef enum {CURSOR_LEFT,CURSOR_RIGHT,CURSOR_HOME} cursorMovement;
-typedef enum {DISPLAY_SCROLLEFT,DISPLAY_SCROLLRIGHT} displayScroll;
-typedef enum {LCD_COMMAND_MODE, LCD_CHARACTER_MODE} modes;
+typedef enum
+{ CURSOR_LEFT, CURSOR_RIGHT, CURSOR_HOME } cursorMovement;
+typedef enum
+{ DISPLAY_SCROLLEFT, DISPLAY_SCROLLRIGHT } displayScroll;
+typedef enum
+{ LCD_COMMAND_MODE, LCD_CHARACTER_MODE } modes;
 
-void byte_to_binary(int x);
-void moveCursor(hd44780 * header, cursorMovement movement);
-void scrollDisplay(hd44780 * header, displayScroll scroll);
-void printString(hd44780 * header, char * string);
-void clearDisplay(hd44780 * header);
-void cursorControl(hd44780 * header, int state);
-void cursorBlink(hd44780 * header, int state);
-void printInt32(hd44780 * header, int val);
+void byte_to_binary (int x);
+void moveCursor (hd44780 * header, cursorMovement movement);
+void scrollDisplay (hd44780 * header, displayScroll scroll);
+void printString (hd44780 * header, char *string);
+void clearDisplay (hd44780 * header);
+void cursorControl (hd44780 * header, int state);
+void cursorBlink (hd44780 * header, int state);
+void printInt32 (hd44780 * header, int val);
 void defineCGChars (hd44780 * header, char array[8][8]);
 
 #endif

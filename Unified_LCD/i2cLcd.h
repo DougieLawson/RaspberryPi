@@ -24,8 +24,8 @@ Copyright (C) Dougie Lawson 2015-2017, all rights reserved.
 int gpio_reg;
 int i2c_fd;
 
-void setDefaultHd44780(hd44780 * header);
-void initialiseDisplay(hd44780 * header);
-void writeBytes(hd44780 * header, int byte, int mode);
+void setDefaultHd44780 (hd44780 * header);
+void initialiseDisplay (hd44780 * header);
+void writeBytes (hd44780 * header, int byte, int mode);
 
 #endif

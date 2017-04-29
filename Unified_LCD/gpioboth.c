@@ -3,13 +3,15 @@ Copyright (C) Dougie Lawson 2017, all rights reserved.
 */
 
 #include <stdlib.h>
+#include <stdio.h>
 #include <unistd.h>
 #include <signal.h>
 #include <string.h>
 #include "hd44780.h"
 #include "commonLcd.h"
-#include "pcfLcd.h"
+#include "gpioLcd.h"
 #include "get31855.h"
+#include "get6675.h"
 
 hd44780 header;
 struct sigaction act;
@@ -28,9 +30,10 @@ sig_handler (int signum, siginfo_t * info, void *ptr)
 int
 main ()
 {
-  int ret_tod = 1;
-  memset (&act, 0, sizeof (act));
+  int ret_tod = 0;
+  char tempRead[40];
 
+  memset (&act, 0, sizeof (act));
   act.sa_sigaction = sig_handler;
   act.sa_flags = SA_SIGINFO;
   sigaction (SIGUSR1, &act, NULL);
@@ -46,9 +49,12 @@ main ()
   while (1)
     {
       clearDisplay (&header);
-      char *tempRead = get31855 (ret_tod);
+      char *t31855rd = get31855 (ret_tod);
+      char *t6675rd = get6675 (ret_tod);
+      sprintf(tempRead, "%s\n%s", t31855rd, t6675rd);
       printString (&header, tempRead);
-      free (tempRead);
+      free (t31855rd);
+      free (t6675rd);
       sleep (2);
     }
 

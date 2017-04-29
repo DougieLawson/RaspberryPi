@@ -28,6 +28,7 @@ sig_handler (int signum, siginfo_t * info, void *ptr)
 int
 main ()
 {
+  int ret_tod = 1;
   memset (&act, 0, sizeof (act));
 
   act.sa_sigaction = sig_handler;
@@ -45,7 +46,7 @@ main ()
   while (1)
     {
       clearDisplay (&header);
-      char *tempRead = get31855 ();
+      char *tempRead = get31855 (ret_tod);
       printString (&header, tempRead);
       free (tempRead);
       sleep (2);

@@ -8,8 +8,8 @@ Copyright (C) Dougie Lawson 2017, all rights reserved.
 #include <string.h>
 #include "hd44780.h"
 #include "commonLcd.h"
-#include "pcfLcd.h"
-#include "get31855.h"
+#include "gpioLcd.h"
+#include "get6675.h"
 
 hd44780 header;
 struct sigaction act;
@@ -46,7 +46,7 @@ main ()
   while (1)
     {
       clearDisplay (&header);
-      char *tempRead = get31855 (ret_tod);
+      char *tempRead = get6675 (ret_tod);
       printString (&header, tempRead);
       free (tempRead);
       sleep (2);

@@ -2,7 +2,7 @@
 Copyright (C) Dougie Lawson 2015-2017, all rights reserved.
 */
 
-#ifndef GET31855_H
-#define GET31855_H
-char *get31855 (int ret_tod);
+#ifndef GET6675_H
+#define GET6675_H
+char *get6675 (int ret_tod);
 #endif

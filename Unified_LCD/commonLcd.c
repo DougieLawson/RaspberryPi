@@ -19,6 +19,7 @@ Copyright (C) Dougie Lawson 2015-2017, all rights reserved.
 #endif
 #ifdef gpio
 #include "gpioLcd.h"
+#include "wiringPi.h"
 #endif
 
 void
@@ -32,7 +33,7 @@ byte_to_binary (int x)
     {
       strcat (b, ((x & z) == z) ? "1" : "0");
     }
-  printf ("%s", b);
+  printf ("%c %02x %s\n", x, x, b);
 }
 
 void
@@ -61,6 +62,7 @@ printString (hd44780 * header, char *string)
   int i;
   for (i = 0; string[i] != '\0'; i++)
     {
+//      byte_to_binary(string[i]);
       if (positionInLine == header->rowNumber)
 	{
 	  writeBytes (header, LCD_DDRAMADDRESS | 0xC0, LCD_COMMAND_MODE);	//jump to next line
@@ -122,6 +124,14 @@ cursorControl (hd44780 * header, int state)
        displayControl | LCD_DISPLAYON | LCD_DISPLAYCONTROL | LCD_HIDECURSOR) &
       ~LCD_SHOWCURSOR;
   writeBytes (header, header->displayControl, LCD_COMMAND_MODE);
+}
+void
+setPrintPosn (hd44780 * header, int offset)
+{
+  if (!header)
+    return;
+  int posn = LCD_DDRAMADDRESS | offset;
+  writeBytes (header, posn, LCD_COMMAND_MODE);
 }
 
 void

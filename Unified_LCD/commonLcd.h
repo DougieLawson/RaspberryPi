@@ -44,6 +44,7 @@ void clearDisplay (hd44780 * header);
 void cursorControl (hd44780 * header, int state);
 void cursorBlink (hd44780 * header, int state);
 void printInt32 (hd44780 * header, int val);
+void setPrintPosn (hd44780 * header, int offset);
 void defineCGChars (hd44780 * header, char array[8][8]);
 
 #endif

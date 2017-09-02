@@ -8,7 +8,6 @@ Copyright (C) Dougie Lawson 2015-2017, all rights reserved.
 #include <netinet/in.h>
 #include <net/if.h>
 #include <ifaddrs.h>
-#include <time.h>
 #include <errno.h>
 #include <stdio.h>
 #include <string.h>
@@ -25,14 +24,6 @@ getIPaddr ()
   char addressOutputBuffer[INET6_ADDRSTRLEN];
   char *ifaceIP = malloc (40);
 
-  time_t rawtime;
-  struct tm *timeinfo;
-  char time_of_day[16];
-
-  time (&rawtime);
-  timeinfo = localtime (&rawtime);
-
-  strftime (time_of_day, 16, "%T %b,%d", timeinfo);
   rc = getifaddrs (&interfaceArray);	/* retrieve the current interfaces */
   if (rc == 0)
     {
@@ -49,8 +40,8 @@ getIPaddr ()
 		  inet_ntop (tempIfAddr->ifa_addr->sa_family, tempAddrPtr,
 			     addressOutputBuffer,
 			     sizeof (addressOutputBuffer));
-		  sprintf (ifaceIP, "%s %s\n%s ", tempIfAddr->ifa_name,
-			   addressOutputBuffer, time_of_day);
+		  sprintf (ifaceIP, "%s %s\0", tempIfAddr->ifa_name,
+			   addressOutputBuffer);
 		}
 	    }
 	}
@@ -60,9 +51,8 @@ getIPaddr ()
     }
   else
     {
-      printf ("getifaddrs() failed with errno =  %d %s \n",
+      printf ("getifaddrs() failed with errno =  %d %s \0",
 	      errno, strerror (errno));
-      sprintf (ifaceIP, "ERROR ##.##.##.##\n%s", time_of_day);
     }
 
   return ifaceIP;

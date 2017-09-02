@@ -26,5 +26,6 @@ int spi_fd;
 void setDefaultHd44780 (hd44780 * header);
 void initialiseDisplay (hd44780 * header);
 void writeBytes (hd44780 * header, int byte, int mode);
+void delay (unsigned int howLong);
 
 #endif

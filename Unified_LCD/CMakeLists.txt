@@ -20,6 +20,7 @@ add_executable(pcfCG charGenLCD.c pcfLcd.c commonLcd.c)
 add_executable(pcf31855 pcf31855.c pcfLcd.c get31855.c commonLcd.c)
 add_executable(pcf6675 pcf6675.c pcfLcd.c get6675.c commonLcd.c)
 add_executable(pcfboth pcfboth.c pcfLcd.c get6675.c get31855.c commonLcd.c)
+add_executable(iptest ipTest.c)
 
 set_target_properties(i2clcd i2cCG PROPERTIES COMPILE_FLAGS -Di2c)
 set_target_properties(spilcd spiCG PROPERTIES COMPILE_FLAGS -DSPI)

@@ -7,7 +7,6 @@ Copyright (C) Dougie Lawson 2015-2017, all rights reserved.
 #include <signal.h>
 #include <string.h>
 #include <stdio.h>
-#include <syslog.h>
 #include <time.h>
 #include "hd44780.h"
 #include "commonLcd.h"

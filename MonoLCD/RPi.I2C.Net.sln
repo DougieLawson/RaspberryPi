@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.16
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RPi.I2C.Net", "RPi.I2C.Net\RPi.I2C.Net.csproj", "{2AE6A02F-4B57-43A1-8C19-2917008215D5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "I2C_LCD", "I2C_LCD\I2C_LCD.csproj", "{7CBC430B-351E-490D-86E1-FB85EF60E5A8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2AE6A02F-4B57-43A1-8C19-2917008215D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2AE6A02F-4B57-43A1-8C19-2917008215D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2AE6A02F-4B57-43A1-8C19-2917008215D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2AE6A02F-4B57-43A1-8C19-2917008215D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7CBC430B-351E-490D-86E1-FB85EF60E5A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7CBC430B-351E-490D-86E1-FB85EF60E5A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7CBC430B-351E-490D-86E1-FB85EF60E5A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7CBC430B-351E-490D-86E1-FB85EF60E5A8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8563FC85-CB32-47C1-A98B-ADE7FD28FECC}
+	EndGlobalSection
+EndGlobal

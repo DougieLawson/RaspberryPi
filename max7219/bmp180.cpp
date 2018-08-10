@@ -45,9 +45,9 @@ SensorData readBMP180()
 	readings.temp = floor((((float)temp / 1000.0) * 100) +0.5) / 100;
 	std::ifstream inputPress(PRESSURE);
 	inputPress >> pressure;
-	std::cout << "In: " << pressure;
+	// std::cout << "In: " << pressure;
 	readings.pressure = pressure * 10.0;
-	std::cout << " Out: " << readings.pressure << std::endl;
+	// std::cout << " Out: " << readings.pressure << std::endl;
 	return readings;
 
 }
@@ -58,12 +58,12 @@ void wait3min()
 	using std::chrono::system_clock;
 	std::time_t tt = system_clock::to_time_t (system_clock::now());
 	struct std::tm *ptm = std::localtime(&tt);
-	std::cout << "Current time: " << std::put_time(ptm, "%X") << std::endl;
+	// std::cout << "Current time: " << std::put_time(ptm, "%X") << std::endl;
 	int offset = 3 - (ptm->tm_min % 3);
-	std::cout << "Waiting for " << offset << " minutes ..." << std::endl;
+	// std::cout << "Waiting for " << offset << " minutes ..." << std::endl;
 	ptm->tm_min+=offset; ptm->tm_sec=0;
 	std::this_thread::sleep_until(system_clock::from_time_t(mktime(ptm)));
-	std::cout << std::put_time(ptm,"%X") << " reached!" << std::endl;
+	// std::cout << std::put_time(ptm,"%X") << " reached!" << std::endl;
 }
 
 int main()
@@ -109,7 +109,7 @@ int main()
 	}	
 
 	SensorData values = readBMP180();
-	std::cout << "Temp: " << values.temp << " Pressure: " << values.pressure << std::endl;
+	// std::cout << "Temp: " << values.temp << " Pressure: " << values.pressure << std::endl;
    
 	sql = "insert into bmp_data (date_time, temp, pressure) values(datetime('now','localtime'), round(?,2), round(?,2));";
 

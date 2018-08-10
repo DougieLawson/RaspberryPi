@@ -8,7 +8,9 @@
 #include <math.h>
 #include "max7219.h"
 #include "spiLED.h"
-#define ALTITUDE 112.2 
+#define ALTITUDE 112.2
+//#define DATABASE "/srv/bmp180/sensordata.db"
+#define DATABASE "/home/pi_f/python/sensordata.db"
 
 max7219 header;
 static int callback(void *data, int argc, char **argv, char **azColName){
@@ -72,7 +74,7 @@ int main(int argc, char* argv[])
    char *sql;
    const char* data = "Callback function called";
 
-   rc = sqlite3_open("/srv/bmp180/sensordata.db", &db);
+   rc = sqlite3_open(DATABASE, &db);
    if( rc ){
       fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
       exit(0);

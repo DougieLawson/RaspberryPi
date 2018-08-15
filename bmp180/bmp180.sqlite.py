@@ -8,10 +8,10 @@ import sqlite3 as sql
 time4 = ''
 
 bus = smbus.SMBus(1)
-sensor = bmp180.Bmp180(bus)
+sensor = bmp180.BMP180(bus)
 sensor.os_mode = 3
 
-sensorData = sql.connect('/srv/bmp180/sensordata.db')
+sensorData = sql.connect('/home/pi_f/python/sensordata.db')
 sensorData.execute("PRAGMA journal_mode=WAL")
 sensorData.execute("VACUUM")
 bmp_data = sensorData.cursor()
@@ -20,7 +20,7 @@ def tick():
 
     while True:
         global time4
-        press, temp = sensor.pressure_and_temperature
+        press, temp = sensor.pressure_and_temperature()
         time1 = time.strftime('%M')
         if int(time1) % 3 == 0:
             time2 = time.strftime('%H:%M:%S')

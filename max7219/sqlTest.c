@@ -9,8 +9,8 @@
 #include "max7219.h"
 #include "spiLED.h"
 #define ALTITUDE 112.2
-//#define DATABASE "/srv/bmp180/sensordata.db"
-#define DATABASE "/home/pi_f/python/sensordata.db"
+#define DATABASE "/srv/bmp180/sensordata.db"
+//#define DATABASE "/home/pi_f/python/sensordata.db"
 
 max7219 header;
 static int callback(void *data, int argc, char **argv, char **azColName){

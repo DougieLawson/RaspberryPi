@@ -12,6 +12,7 @@ offset = "-1 day"
 
 stream_ids = tls.get_credentials_file()['stream_ids']
 
+#sensorData = sql.connect('/home/pi_f/python/sensordata.db')
 sensorData = sql.connect('/srv/bmp180/sensordata.db')
 bmp_data = sensorData.cursor()
 
@@ -84,6 +85,7 @@ def tick():
             s1.open()
             s2.open()
             s3.open()
+            bmp_data.execute("PRAGMA query_only;")
             bmp_data.execute("select date_time, temp, pressure from bmp_data where date_time between datetime('now',?) and datetime('now')", (offset,) )
             offset = "-12 minutes"
             while True:

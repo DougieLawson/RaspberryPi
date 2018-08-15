@@ -10,9 +10,8 @@
 #include <cmath>
 #include "sqlite3.h"
 
-//#define DATABASE "/srv/bmp180/sensordata.db"
-#define DATABASE "/home/pi_f/python/sensordata.db"
-//#define DATABASE "/home/pi_f/c/sensordata.db"
+#define DATABASE "/srv/bmp180/sensordata.db"
+//#define DATABASE "/home/pi_f/python/sensordata.db"
 
 #define PRESSURE "/sys/bus/iio/devices/iio:device0/in_pressure_input"
 #define TEMPERATURE "/sys/bus/iio/devices/iio:device0/in_temp_input"

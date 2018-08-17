@@ -9,9 +9,13 @@
 #include <cstdlib>
 #include <cmath>
 #include "sqlite3.h"
+#include "mqttMessage.hpp"
 
 #define DATABASE "/srv/bmp180/sensordata.db"
-//#define DATABASE "/home/pi_f/python/sensordata.db"
+#define BROKER "10.1.1.11"
+#define PORT 1883
+#define TEMP_TOPIC "falcon/out/temperature"
+#define PRESS_TOPIC "falcon/out/pressure"
 
 #define PRESSURE "/sys/bus/iio/devices/iio:device0/in_pressure_input"
 #define TEMPERATURE "/sys/bus/iio/devices/iio:device0/in_temp_input"
@@ -109,6 +113,34 @@ int main()
 
 	SensorData values = readBMP180();
 	// std::cout << "Temp: " << values.temp << " Pressure: " << values.pressure << std::endl;
+	
+	std::string tempStr, pressStr;
+   	std::stringstream tempSS, pressSS, timeSS;
+   	std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
+
+   	std::time_t tt;
+   	tt = std::chrono::system_clock::to_time_t(now);
+
+   	tempSS << values.temp;
+   	pressSS << values.pressure;
+   	timeSS << std::put_time(std::localtime(&tt), "[%a, %d/%m/%Y %T %z] ");
+
+   	tempStr = timeSS.str();
+   	tempStr += tempSS.str();
+   	tempStr += " °C";
+
+   	pressStr = timeSS.str();
+   	pressStr += pressSS.str();
+   	pressStr += " hPa";
+
+   	mqttMessage tempMQTT("tempMQTT", TEMP_TOPIC, BROKER, PORT);
+   	tempMQTT.send_message(tempStr.c_str());
+   	mqttMessage pressMQTT("pressMQTT", PRESS_TOPIC, BROKER, PORT);
+   	pressMQTT.send_message(pressStr.c_str());
+
+   	timeSS.str(std::string());
+   	tempSS.str(std::string());
+  	pressSS.str(std::string());
    
 	sql = "insert into bmp_data (date_time, temp, pressure) values(datetime('now','localtime'), round(?,2), round(?,2));";
 

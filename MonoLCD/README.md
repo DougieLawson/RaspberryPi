@@ -1,5 +1,5 @@
-Raspberry Pi Mono 1602 LCD 
-==========================
+Raspberry Pi Mono 1602 LCD (Alpha Sample)
+=========================================
 
 This needs the I2C library from MagPi Mag Issue #30 as a basis. Most of the code is built on that as a base level.
 
@@ -17,3 +17,5 @@ Build both pieces with
 
 &copy; 2017 Dougie Lawson, All rights reserved
 Licence: CC 4.0 BY-NC-SA
+
+**NOTE** This code has never been tested on Win10 IoT (and won't ever be tested that way).

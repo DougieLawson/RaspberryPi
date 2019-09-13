@@ -1,5 +1,5 @@
 /*
-Copyright (C) Dougie Lawson 2015-2017, all rights reserved.
+Copyright (C) Dougie Lawson 2015-2017, 2019 all rights reserved.
 */
 
 #include <fcntl.h>
@@ -11,6 +11,7 @@ Copyright (C) Dougie Lawson 2015-2017, all rights reserved.
 #include <time.h>
 #include <sys/ioctl.h>
 #include "linux/i2c-dev.h"
+#include "i2c/smbus.h"
 #include "hd44780.h"
 #include "commonLcd.h"
 #include "pcfLcd.h"

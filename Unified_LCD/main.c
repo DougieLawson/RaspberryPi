@@ -1,5 +1,5 @@
 /*
-Copyright (C) Dougie Lawson 2015-2017, all rights reserved.
+Copyright (C) Dougie Lawson 2015-2017, 2019 all rights reserved.
 */
 
 #include <stdlib.h>
@@ -32,7 +32,7 @@ struct tm *timeinfo;
 char time_of_day[16];
 int offset = 0;
 int len;
-char fortySP[40];
+char fortySP[41];
 
 void
 sig_handler (int signum, siginfo_t * info, void *ptr)

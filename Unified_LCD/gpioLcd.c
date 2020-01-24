@@ -1,5 +1,5 @@
 /*
-Copyright (C) Dougie Lawson 2015-2017, all rights reserved.
+Copyright (C) Dougie Lawson 2015-2020, all rights reserved.
 */
 
 #include <string.h>
@@ -9,7 +9,7 @@ Copyright (C) Dougie Lawson 2015-2017, all rights reserved.
 #include "hd44780.h"
 #include "commonLcd.h"
 #include "gpioLcd.h"
-#include "wiringPi.h"
+#include "wP.h"
 
 void
 setDefaultHd44780 (hd44780 * header)

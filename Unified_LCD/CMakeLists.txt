@@ -1,5 +1,5 @@
 #
-# Copyright (C) Dougie Lawson 2015-2017, 2019 all rights reserved.
+# Copyright (C) Dougie Lawson 2015-2020 all rights reserved.
 #
 
 cmake_minimum_required(VERSION 3.0)
@@ -27,14 +27,14 @@ set_target_properties(spilcd spiCG PROPERTIES COMPILE_FLAGS -DSPI)
 set_target_properties(gpiolcd gpioCG gpio31855 gpio6675 gpioboth PROPERTIES COMPILE_FLAGS -Dgpio)
 set_target_properties(pcflcd pcfCG pcf31855 pcf6675 pcfboth PROPERTIES COMPILE_FLAGS -Dpcf)
 
-find_library(wiringPi_LIB wiringPi)
+#find_library(wiringPi_LIB wiringPi)
 find_library(i2c_LIB i2c)
 
-target_link_libraries(gpiolcd ${wiringPi_LIB})
-target_link_libraries(gpioCG ${wiringPi_LIB})
-target_link_libraries(gpio31855 ${wiringPi_LIB})
-target_link_libraries(gpio6675 ${wiringPi_LIB})
-target_link_libraries(gpioboth ${wiringPi_LIB})
+#target_link_libraries(gpiolcd ${wiringPi_LIB})
+#target_link_libraries(gpioCG ${wiringPi_LIB})
+#target_link_libraries(gpio31855 ${wiringPi_LIB})
+#target_link_libraries(gpio6675 ${wiringPi_LIB})
+#target_link_libraries(gpioboth ${wiringPi_LIB})
 
 
 target_link_libraries(i2clcd ${i2c_LIB})

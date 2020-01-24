@@ -1,7 +1,7 @@
 Unified LCD driver
 ==================
 
-Copyright &copy; Dougie Lawson 2015-2017, all rights reserved.
+Copyright &copy; Dougie Lawson 2015-2020, all rights reserved.
  
 This work is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.
  
@@ -58,3 +58,4 @@ For PCF8574 GPIO chips the LCD needs to match the normal backpacks
 * D6 == P6
 * D7 == P7
 
+The latest Jan 2020 update is to remove any dependency on wiringPi. 

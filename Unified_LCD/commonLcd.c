@@ -1,5 +1,5 @@
 /*
-Copyright (C) Dougie Lawson 2015-2017, all rights reserved.
+Copyright (C) Dougie Lawson 2015-2020, all rights reserved.
 */
 
 #include <string.h>
@@ -19,7 +19,7 @@ Copyright (C) Dougie Lawson 2015-2017, all rights reserved.
 #endif
 #ifdef gpio
 #include "gpioLcd.h"
-#include "wiringPi.h"
+#include "wP.h"
 #endif
 
 void

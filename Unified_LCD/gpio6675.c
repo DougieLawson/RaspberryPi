@@ -1,7 +1,8 @@
 /*
-Copyright (C) Dougie Lawson 2017, all rights reserved.
+Copyright (C) Dougie Lawson 2017, 2020, all rights reserved.
 */
 
+#include "wP.h"
 #include <stdlib.h>
 #include <unistd.h>
 #include <signal.h>

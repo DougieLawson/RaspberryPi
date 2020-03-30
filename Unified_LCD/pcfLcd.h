@@ -1,5 +1,5 @@
 /*
-Copyright (C) Dougie Lawson 2015-2017, all rights reserved.
+Copyright (C) Dougie Lawson 2015-2020, all rights reserved.
 */
 
 #ifndef PCFLCD_H
@@ -14,7 +14,7 @@ Copyright (C) Dougie Lawson 2015-2017, all rights reserved.
 #define PIN_RS 0
 #define PIN_BACKLIGHT 3
 
-#define PCF_ADDR 0x27
+#define PCF_ADDR 0x3F
 int gpio_reg;
 int i2c_fd;
 

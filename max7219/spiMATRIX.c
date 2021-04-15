@@ -1,4 +1,4 @@
-// (C) Copyright 2016, Dougie Lawson. All rights reserved.
+// (C) Copyright 2018, Dougie Lawson. All rights reserved.
 #include <fcntl.h>
 #include <string.h>
 #include <stdio.h>
@@ -7,9 +7,9 @@
 #include <sys/ioctl.h>
 #include <linux/spi/spidev.h>
 #include "max7219.h"
-#include "spiLED.h"
+#include "spiMATRIX.h"
 
-static char *spiDevice = "/dev/spidev0.0";
+static char *spiDevice = "/dev/spidev0.1";
 static uint8_t spiBPW = 8;
 static uint32_t spiSpeed = 5000000;
 static uint16_t spiDelay = 0;
@@ -47,7 +47,7 @@ void initialiseDisplay(max7219 *header)
   spiOpen(spiDevice);
 
   writeBytes(header, MAX7219_REG_SCANLIMIT, 7);
-  writeBytes(header, MAX7219_REG_DECODEMODE, 0xff);
+  writeBytes(header, MAX7219_REG_DECODEMODE, 0x00);
   writeBytes(header, MAX7219_REG_SHUTDOWN, 1);
   writeBytes(header, MAX7219_REG_DISPLAYTEST, 0);
   setBrightness(header, 5);
@@ -82,61 +82,6 @@ void clearDisplay(max7219 *header)
   digitDisplay(header);
 }
 
-void writeDigits(max7219 *header, char chars[12])
-{
-  int i,j;
-  if (!header) return;
-  i = 7;
-  j = 0;
-  while (j <= 11 && i >= 0)
-  {
-    switch ((int)chars[j]) {
-    case '0':
-    case '1':
-    case '2':
-    case '3':
-    case '4':
-    case '5':
-    case '6':
-    case '7':
-    case '8':
-    case '9':
-  
-      header->digits[i] = asciiToBCD(chars[j]);
-      j++;
-      i--;
-      break;
-    case ' ':
-      header->digits[i] = 0x0F;
-      j++;
-      i--;
-      break;
-    case '-':
-      header->digits[i] = 0x0a;
-      j++;
-      i--;
-      break;
-    case ':':
-//      header->digits[i] = 0x8f;
-//      j++;
-//      i--;
-//      break;
-    case '.':
-      header->digits[i+1] = header->digits[i+1] + 0x80;
-      j++;
-      break;
-    case 0x00:
-      j = 12;
-      i = -1;
-      break; 
-    default:
-      j++;
-      break;
-    }
-  }
-  digitDisplay(header);
-}
-
 void digitDisplay(max7219 *header)
 {
   int i;
@@ -156,9 +101,16 @@ void setBrightness(max7219 *header, int bright)
   writeBytes(header, MAX7219_REG_INTENSITY, bright);
 }
 
-uint8_t asciiToBCD (uint8_t chr) 
+void writeDigits(max7219 *header, char chars[12])
 {
+  int i;
   uint8_t bcd_value;
-  bcd_value = (chr - 48);
-  return bcd_value;
+  if (!header) return;
+  for (i =0;i < 8;i++)
+  {
+	  bcd_value = (chars[i] - 48);
+	  if (bcd_value > 9) bcd_value = 0;
+	  header->digits[i] = bcd_value;
+  }
+  digitDisplay(header);
 }

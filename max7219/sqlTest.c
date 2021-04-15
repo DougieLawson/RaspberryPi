@@ -8,7 +8,7 @@
 #include <math.h>
 #include "max7219.h"
 #include "spiLED.h"
-#define ALTITUDE 112.2
+#define ALTITUDE 122.5
 #define DATABASE "/srv/bmp180/sensordata.db"
 //#define DATABASE "/home/pi_f/python/sensordata.db"
 
@@ -81,7 +81,7 @@ int main(int argc, char* argv[])
    }
 
    /* Create SQL statement */
-   sql = "SELECT a.date_time, a.temp, a.pressure from bmp_data a where a.date_time in (select max(b.date_time) from bmp_data b);";
+   sql = "SELECT datetime(a.date_time, \'localtime\') as date_time, a.temp, a.pressure from bmp_data a where a.date_time in (select max(b.date_time) from bmp_data b);";
 
    /* Execute SQL statement */
    rc = sqlite3_exec(db, sql, callback, (void*)data, &zErrMsg);

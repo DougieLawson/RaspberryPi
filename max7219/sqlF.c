@@ -9,10 +9,13 @@
 #include <signal.h>
 #include "max7219.h"
 #include "spiLED.h"
-#define ALTITUDE 112.2
+#define ALTITUDE 122.5
 #define DATABASE "/srv/bmp180/sensordata.db"
 //#define DATABASE "/home/pi_f/python/sensordata.db"
 
+const char *spaces4 = "    ";
+const char *spaces2 = "  ";
+const char *space = " ";
 max7219 header;
 struct sigaction act;
 
@@ -33,6 +36,7 @@ static int callback(void *data, int argc, char **argv, char **azColName){
    char *token2;
    char *stringp = chars;
    const char *delim = " ";
+   float tempC;
    float tempF;
    float pressureMSL;
    
@@ -53,19 +57,21 @@ static int callback(void *data, int argc, char **argv, char **azColName){
         chars1[8] = '\0';
         writeDigits(&header, chars1);
         sleep(4);
-
-        writeDigits(&header, token2);
+        clearDisplay(&header);
+	sprintf(chars1, "%2s%8s", spaces2, token2);
+        writeDigits(&header, chars1);
         sleep(4);
       }
       else if (strcmp(azColName[i], "temp") == 0)
       {
         clearDisplay(&header);
-        sprintf(chars,"%8s",argv[i]);
+	tempC = atof(argv[i]);
+        sprintf(chars,"%5s%2.1f", spaces4, tempC );
         writeDigits(&header, chars);
         sleep(8);
         clearDisplay(&header);
         tempF = (9 * ( atof(chars) / 5) + 32);
-        sprintf(chars,"%2.1f", tempF);
+        sprintf(chars,"%5s%2.1f", spaces4, tempF);
         writeDigits(&header, chars);
         sleep(4);
       }
@@ -79,7 +85,7 @@ static int callback(void *data, int argc, char **argv, char **azColName){
         // Database holds pressure at local altitude
         // Correct pressure for mean sea level
         pressureMSL = atof(chars) / powf(1 - ( ALTITUDE / 44330.0) , 5.255);
-        sprintf(chars,"%4.2f", pressureMSL);
+        sprintf(chars,"%2s%4.2f", space, pressureMSL);
         writeDigits(&header, chars);
         sleep(4);
       }
@@ -145,7 +151,7 @@ int main(int argc, char* argv[])
      LoDtoken = strsep(&LoDstringp, delim);
      LoDtime = strsep(&LoDstringp, delim); /* skip @ */
      LoDtime = strsep(&LoDstringp, delim); /* got Time */
-     sprintf(charst,"%8s",LoDtime);
+     sprintf(charst,"%2s%8s", spaces2, LoDtime);
      writeDigits(&header, charst);
      sleep(4);
 

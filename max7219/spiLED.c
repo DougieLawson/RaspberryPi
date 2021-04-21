@@ -1,4 +1,4 @@
-// (C) Copyright 2016, Dougie Lawson. All rights reserved.
+// (C) Copyright 2016, 2020, Dougie Lawson. All rights reserved.
 #include <fcntl.h>
 #include <string.h>
 #include <stdio.h>
@@ -9,7 +9,7 @@
 #include "max7219.h"
 #include "spiLED.h"
 
-static char *spiDevice = "/dev/spidev0.0";
+static char *spiDevice = "/dev/spidev0.1";
 static uint8_t spiBPW = 8;
 static uint32_t spiSpeed = 5000000;
 static uint16_t spiDelay = 0;
@@ -101,7 +101,6 @@ void writeDigits(max7219 *header, char chars[12])
     case '7':
     case '8':
     case '9':
-  
       header->digits[i] = asciiToBCD(chars[j]);
       j++;
       i--;
@@ -113,6 +112,11 @@ void writeDigits(max7219 *header, char chars[12])
       break;
     case '-':
       header->digits[i] = 0x0a;
+      j++;
+      i--;
+      break;
+    case 'P':
+      header->digits[i] = 0x0E;
       j++;
       i--;
       break;

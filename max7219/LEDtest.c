@@ -28,7 +28,7 @@ int main()
   act.sa_flags = SA_SIGINFO;
   sigaction(SIGTERM, &act, NULL);
 
-  char chars[12] = "12:34:56";
+  char chars[12] = "11.0250 P";
   initialiseDisplay(&header);
   clearDisplay(&header);
   

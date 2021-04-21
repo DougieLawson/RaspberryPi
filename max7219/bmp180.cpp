@@ -31,7 +31,7 @@ void sig_handler(int signum)
 {
    std::cout << "Received signal " << signum << std::endl;
    sqlite3_close(db);
-   std::exit(signum);
+   std::exit(0);
 }
 
 static int callback(void *data, int argc, char **argv, char **azColName){
@@ -75,8 +75,11 @@ int main()
 
    int rc;
    char *zErrMsg = 0;
-   const char* sqlini1 = "PRAGMA journal_mode=WAL";
-   const char* sqlini2 = "VACUUM";
+   const char* sqlini1 = "PRAGMA wal_checkpoint(truncate);";
+   const char* sqlini2 = "PRAGMA journal_mode=WAL;";
+   const char* sqlini3 = "PRAGMA vacuum;";
+   const char* sqlini4 = "PRAGMA optimize;";
+   const char* sqlini5 = "PRAGMA incremental_vacuum;";
    const char* sql;
 
    const char* data = "Callback function called";
@@ -89,15 +92,44 @@ int main()
    rc = sqlite3_exec(db, sqlini1, callback, (void*)data, &zErrMsg);
    if( rc )
    {
-	std::cerr <<  "PRAGMA journal_mode: " <<  sqlite3_errmsg(db) << std::endl;
+        std::cerr <<  "TRUNCATE: " << sqlite3_errmsg(db) << std::endl;
+	std::exit(rc);
+   }
+
+   sqlite3_close(db);
+   rc = sqlite3_open(DATABASE, &db);
+   if( rc )
+   {
+	std::cerr <<  "Can't open database: " <<  sqlite3_errmsg(db) << std::endl;
 	std::exit(rc);
    }
 
    rc = sqlite3_exec(db, sqlini2, callback, (void*)data, &zErrMsg);
    if( rc )
    {
+	std::cerr <<  "PRAGMA journal_mode: " <<  sqlite3_errmsg(db) << std::endl;
+	std::exit(rc);
+   }
+
+   rc = sqlite3_exec(db, sqlini3, callback, (void*)data, &zErrMsg);
+   if( rc )
+   {
 	std::cerr <<  "VACUUM: " <<  sqlite3_errmsg(db) << std::endl;
 	std::exit(rc);
+   }
+
+   rc = sqlite3_exec(db, sqlini4, callback, (void*)data, &zErrMsg);
+   if( rc )
+   {
+	std::cerr <<  "OPTIMISE: " <<  sqlite3_errmsg(db) << std::endl;
+	std::exit(rc);
+   }
+
+   rc = sqlite3_exec(db, sqlini5, callback, (void*)data, &zErrMsg);
+   if( rc )
+   {
+	std::cerr <<  "INCREMENTAL VACUUM: " <<  sqlite3_errmsg(db) << std::endl;
+        std::exit(rc);
    }
 
    while (true)
@@ -180,7 +212,7 @@ int main()
 	    std::cerr <<  "SQL END error: " << zErrMsg << std::endl;
             sqlite3_free(zErrMsg);
 	    std::exit(rc);
-	}	
+	}
 
    }
    return 0;

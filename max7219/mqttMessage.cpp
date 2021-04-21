@@ -16,7 +16,7 @@ mqttMessage::mqttMessage(const char * _id,const char * _topic, const char * _hos
         this->host = _host;
         this->topic = _topic;
         connect_async(host, port, keepalive);
-	std::this_thread::sleep_for(std::chrono::milliseconds(10));
+	std::this_thread::sleep_for(std::chrono::milliseconds(20));
 };
 
 mqttMessage::~mqttMessage()
@@ -27,7 +27,7 @@ mqttMessage::~mqttMessage()
 bool mqttMessage::send_message(const  char* _message)
 {
         int ret = publish(NULL,this->topic,strlen(_message),_message,1,false);
-	std::this_thread::sleep_for(std::chrono::milliseconds(10));
+	std::this_thread::sleep_for(std::chrono::milliseconds(50));
         disconnect();
         return ( ret == MOSQ_ERR_SUCCESS );
 }

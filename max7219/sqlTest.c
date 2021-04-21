@@ -1,4 +1,4 @@
-// (C) Copyright 2016, Dougie Lawson. All rights reserved.
+// (C) Copyright 2016,2021, Dougie Lawson. All rights reserved.
 #include <stdio.h>
 #include <stdlib.h>
 #include <sqlite3.h> 
@@ -6,89 +6,79 @@
 #include <unistd.h>
 #include <stdint.h>
 #include <math.h>
-#include "max7219.h"
-#include "spiLED.h"
+#define __USE_XOPEN
+#include <time.h>
 #define ALTITUDE 122.5
 #define DATABASE "/srv/bmp180/sensordata.db"
-//#define DATABASE "/home/pi_f/python/sensordata.db"
 
-max7219 header;
-static int callback(void *data, int argc, char **argv, char **azColName){
-   int i;
-   char chars[30];
-   char chars1[9];
-   char *token1;
-   char *token2;
-   char *stringp = chars;
-   float tempF;
-   float pressureMSL;
-   const char *delim = " ";
-   
-   for(i=0; i<argc; i++){
-      if (strcmp(azColName[i], "date_time") == 0) 
-      {
+static int fetchResults(sqlite3_stmt* stmt)
+{
+	int i;
+	const unsigned char* dateTime;
+	double tempC;
+	double tempF;
+	double pressure;
+	double pressureMSL;
+	struct tm ltm = {0}; 
         // Date & time format is yyyy-mm-dd hh:mm:ss
-        // Split that into 
-        // Date (token1): yy-mm-dd
-        // Time (token2): hh:mm:ss
-        sprintf(chars, "%s", argv[i]);
-        token1 = strsep(&stringp, delim);
-        token2 = strsep(&stringp, delim);
-        
-        // Ugly use of memcpy to strip off century digits
-        memcpy(chars1, &token1[2], 8);
-        chars1[8] = '\0';
-        printf("Date       :** %s **\r\n", chars1);
-        printf("Time       :** %s **\r\n", token2);
-      }
-      else if (strcmp(azColName[i], "temp") == 0)
-      {
-        sprintf(chars,"%8s",argv[i]);
-        tempF = (9 * ( atof(chars) / 5) + 32);
-        printf("Temperature:** %s **\r\n", chars);
-        printf("Temp (F)   :** %2.1f **\r\n", tempF);
-      }
-      else if (strcmp(azColName[i], "pressure") == 0)
-      {
-        sprintf(chars,"%8s",argv[i]);
+	dateTime = sqlite3_column_text(stmt, 0);
+	strptime(dateTime, "%Y-%m-%d %H:%M:%S", &ltm);
+        printf("Date : %02d-%02d-%02d\n", ltm.tm_year-100, ltm.tm_mon+1, ltm.tm_mday );
+	printf("Time : %02d:%02d:%02d\n", ltm.tm_hour, ltm.tm_min, ltm.tm_sec);
+	tempC = sqlite3_column_double(stmt, 1);
+        printf("°C   : %5s%2.1f\n", "     ", tempC );
+        tempF = (9 * ( tempC / 5) + 32);
+        printf("°F   : %5s%2.1f\n", "     ", tempF);
+	pressure = sqlite3_column_double(stmt, 2);
+        printf("QFE  : %2s%4.2f\n", "  ", pressure);
         // Database holds pressure at local altitude
         // Correct pressure for mean sea level
-        pressureMSL = atof(chars) / powf(1 - ( ALTITUDE / 44330.0) , 5.255);
-        printf("Pressure   :** %4.2f **\r\n", atof(chars));
-        printf("PressureMSL:** %4.2f **\r\n", pressureMSL);
-      }
-      else 
-      {
-        printf("Unknown column: %s\r\n", azColName[i]);
-      }
-   }
-   printf("\n");
-   return 0;
+        pressureMSL = pressure / powf(1 - ( ALTITUDE / 44330.0) , 5.255);
+        printf("QNH  : %2s%4.2f\n", "  ", pressureMSL);
+	return 0;
 }
 
 int main(int argc, char* argv[])
 {
-   sqlite3 *db;
-   char *zErrMsg = 0;
-   int rc;
-   char *sql;
-   const char* data = "Callback function called";
-
-   rc = sqlite3_open(DATABASE, &db);
-   if( rc ){
-      fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
-      exit(0);
-   }
-
-   /* Create SQL statement */
-   sql = "SELECT datetime(a.date_time, \'localtime\') as date_time, a.temp, a.pressure from bmp_data a where a.date_time in (select max(b.date_time) from bmp_data b);";
-
-   /* Execute SQL statement */
-   rc = sqlite3_exec(db, sql, callback, (void*)data, &zErrMsg);
-   if( rc != SQLITE_OK ){
-      fprintf(stderr, "SQL error: %s\n", zErrMsg);
-      sqlite3_free(zErrMsg);
-   }
-   sqlite3_close(db);
-   return 0;
+	sqlite3* db;
+	sqlite3_stmt* stmt;
+	int rc;
+	char* sql;
+	char* zErrMsg = 0;
+	rc = sqlite3_open(DATABASE, &db);
+	if( rc )
+	{
+		fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
+		exit(0);
+	}
+	rc = sqlite3_exec(db, "PRAGMA query_only", NULL, NULL, &zErrMsg);
+	if( rc )
+	{
+		fprintf(stderr, "query-only failed %s\n" ,  sqlite3_errmsg(db));
+		exit(rc);
+	}
+	sql = "SELECT datetime(a.date_time, \'localtime\') as date_time, a.temp, a.pressure from bmp_data a where a.date_time in (select max(b.date_time) from bmp_data b);";
+	sqlite3_prepare_v3(db, sql, strlen(sql)+1, 0, &stmt, NULL);
+	while (1)
+	{
+		int s;
+		s = sqlite3_step(stmt);
+		if (s == SQLITE_ROW)
+		{
+			fetchResults(stmt);
+		}
+		else if (s == SQLITE_DONE)
+		{
+			break;
+		}
+		else
+		{
+			fprintf(stderr, "sqlite_step failed (%d) %s\n", s, sqlite3_errmsg(db));
+			exit(s);
+		}
+	}
+	sqlite3_clear_bindings(stmt);
+	sqlite3_reset(stmt);
+	sqlite3_close(db);
+	return 0;
 }

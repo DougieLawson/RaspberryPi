@@ -1,6 +1,6 @@
 cmake_minimum_required (VERSION 2.8.11)
 project (LEDspi)
-add_executable(LEDspi sqlF.c spiLED.c)
+add_executable(LEDspi sqlF.c sqlTar.c spiLED.c)
 add_executable(SQLTest sqlTest.c)
 add_executable(LEDtest LEDtest.c spiLED.c)
 add_executable(LEDclock LEDclock.c spiLED.c)

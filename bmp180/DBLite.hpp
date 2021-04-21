@@ -2,6 +2,7 @@
 #include <string>
 #include <sstream>
 #include <cstdlib>
+#include <cstring>
 #include <sqlite3.h>
 #include "mqttMessage.hpp"
 
@@ -10,107 +11,104 @@ using namespace std;
 class DBLite {
 
     private:
-        sqlite3 *db;
-        char *zErrMsg;
-        int rc;
-        char* sql;
-        sqlite3_stmt *stmt;
+	    sqlite3_stmt* stmt = NULL;
+	    sqlite3 *db;
+	    char *zErrMsg;
+	    int rc;
+	    void fetchResults()
+	    {
+		    int hourValue;
+		    double temp;
+		    const unsigned char* dT;
+		    string hour;
+		    stringstream mqttPayLoadStr;
+		    stringstream sOutput;
+		    string mqttPayLoad;
+		    int rowNum;
 
-        static int callback(void* NotUsed, int argc, char **argv, char **azColName)
-        {
-            int hour = 0;
-            stringstream sOutput;
-            stringstream sColName;
-            stringstream sColValue;
-	    stringstream sRowNum;
-            string colName;
-            string tempValue;
-            string dateTimeValue;
-            string hourValue;
-	    string rowValue;
-	    int rowNumValue;
-	    int rowNum;
-            for(int i = 0; i < argc; i++)
-            {
-                sColName << azColName[i];
-                sColValue.str(argv[i]);
-                sColName >> colName;
+		    while(1) {
+			    int s;
+			    s = sqlite3_step(stmt);
+			    if (s == SQLITE_ROW)
+			    {
+				    rowNum = sqlite3_column_int(stmt, 0);
+				    dT = sqlite3_column_text(stmt, 1);
+				    temp = sqlite3_column_double(stmt, 2);
 
-                if (colName.compare("rownum") == 0)
-                {
-                    sColValue >> rowNumValue;
-		    rowNum = int((rowNumValue+1)/20);
-		    sRowNum << rowNum;
-		    rowValue = sRowNum.str();
-                }
-                if (colName.compare("date_time") == 0)
-                {
-                    sColValue >> tempValue;
-                    sColValue >> dateTimeValue;
-                    if (dateTimeValue.compare(2, 4, ":00:") == 0)
-                    {
-                        hour = 1;
-                        hourValue = dateTimeValue.substr(0,2);
-                    }
-                }
+				    string dateTime((char*)dT, 19);
+				    if (dateTime.compare(13, 4, ":00:") == 0)
+				    {
+					    hour = dateTime.substr(11,2);
+				            mqttMessage tempMQTT("tempMQTT", "dbread/out/temp", "10.1.1.11", 1883);
+					    mqttPayLoadStr << (rowNum+1) / 20;
+					    mqttPayLoadStr << ":" << hour;
+					    mqttPayLoadStr << ":" << temp << endl;
+					    mqttPayLoad = mqttPayLoadStr.str();
 
-                if (colName.compare("temp") == 0 && hour == 1)
-                {
-                    sColValue >> tempValue;
-                    string sOutputStr;
-		    sOutput << "{\"rownum\":" << rowValue;
-                    sOutput << ", \"hour\": " << hourValue;
-		    sOutput << ", \"temp\": " << tempValue << "}," << endl;
-                    hour = 0;
-                    sOutputStr += rowValue+":"+hourValue+":"+tempValue+"\n";
+				            tempMQTT.send_message(mqttPayLoad.c_str());
+					    /*
+				            sOutput << "{\"rownum\":" << (rowNum+1) / 20;
+				            sOutput << ", \"hour\": " << hour;
+				            sOutput << ", \"temp\": " << temp << "}," << endl;
+				            cout << sOutput.str();
+				            sOutput.str(std::string());
+				            sOutput.clear();
+					    */
+					    mqttPayLoadStr.str(std::string());
+					    mqttPayLoadStr.clear();
+				    }
+			    }
+			    else if (s == SQLITE_DONE)
+			    {
+				    return;
+			    }
+			    else
+			    {
+				    cerr << "sqlite3_step failed " << endl;
+				    exit(1);
+			    }
+		    }
+	    }
 
-                    mqttMessage tempMQTT("tempMQTT", "dbread/out/temp", "10.1.1.11", 1883);
-                    tempMQTT.send_message(sOutputStr.c_str());
-                    //cout << sOutput.str();
-                 }
-                 sColName.str(std::string());
-                 sColValue.str(std::string());
-                 sOutput.str(std::string());
-                 sColName.clear();
-                 sColValue.clear();
-                 sOutput.clear();
-             }
-             return 0;
-         }
-
-         void checkDBErrors()
-         {
-             if( rc )
-             {
-                 cout << "DB Error: " << sqlite3_errmsg(db) << endl;
-                 closeDB();
-             }
-         }
-	 
-         void initDB()
-         {
-             rc = sqlite3_open("/srv/bmp180/sensordata.db", &db);
-             checkDBErrors();
-         }
-
+	    void checkDBErrors()
+	    {
+		   //cout << "check DB errors" << endl;
+		   if( rc )
+		   {
+			    cout << "DB Error: " << sqlite3_errmsg(db) << endl;
+			    closeDB();
+		    }
+	    }
+	    void initDB()
+	    {
+		   //cout << "init DB " << endl;
+		   rc = sqlite3_open("/srv/bmp180/sensordata.db", &db);
+		   checkDBErrors();
+	    }
     public:
-        DBLite()
-        {
-            initDB();
-	}
+	    DBLite()
+	    {
+		   //cout << "DBLite() " << endl;
+		   initDB();
+	    }
+	    void showTable()
+	    {
+		   //cout << "showTable() " << endl;
 
-        void showTable()
-        {
-            sql = (char*)"SELECT\
-		   row_number() over( order by date_time) rownum,\
-		    date_time, temp FROM bmp_data\
-                          WHERE date_time BETWEEN datetime('now','-1440 minutes')\
-                          AND datetime('now') ;";
-            rc = sqlite3_exec(db, sql, callback, NULL, &zErrMsg);
-        }
-
-        void closeDB()
-        {
-            sqlite3_close(db);
-        }
+	    	   
+		   string sql = "SELECT\
+		   row_number() over(order by date_time) rownum,\
+		   date_time, temp FROM bmp_data\
+		   WHERE date_time BETWEEN datetime('now','-1440 minutes')\
+		   AND datetime('now') ;";
+		   sqlite3_prepare_v3(db, sql.c_str(), sql.length() +1, 0, &stmt, NULL);
+		   fetchResults();
+		   //            rc = sqlite3_exec(db, sql, callback, NULL, &zErrMsg);
+	    }
+	    void closeDB()
+	    {
+		   //cout << "closeDB() " << endl;
+		   sqlite3_close(db);
+	    }
 };
+
